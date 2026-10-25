@@ -1,0 +1,2228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Giftira — Small Gifts. Big Feelings. | Personalized Gifting Platform</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#fff1f2',
+              100: '#ffe4e6',
+              200: '#fecdd3',
+              500: '#f43f5e',
+              600: '#e11d48',
+              700: '#be123c',
+              800: '#9f1239',
+              900: '#881337',
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            serif: ['Playfair Display', 'serif'],
+            cinzel: ['Cinzel', 'serif'],
+            script: ['Dancing Script', 'cursive'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;800&family=Dancing+Script:wght@600;700&family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;0,900;1,600&display=swap" rel="stylesheet">
+
+  <style>
+    /* Custom Styling & Utilities */
+    .font-cinzel { font-family: 'Cinzel', serif; }
+    .font-script { font-family: 'Dancing Script', cursive; }
+    .font-serif { font-family: 'Playfair Display', serif; }
+    .scrollbar-none::-webkit-scrollbar { display: none; }
+    .scrollbar-none { -ms-overflow-style: none; scrollbar-width: none; }
+    
+    @keyframes pulse-wave {
+      0%, 100% { height: 6px; }
+      50% { height: 26px; }
+    }
+    .wave-bar {
+      animation: pulse-wave 1.2s ease-in-out infinite;
+    }
+    .wave-bar:nth-child(2) { animation-delay: 0.2s; }
+    .wave-bar:nth-child(3) { animation-delay: 0.4s; }
+    .wave-bar:nth-child(4) { animation-delay: 0.1s; }
+    .wave-bar:nth-child(5) { animation-delay: 0.5s; }
+    .wave-bar:nth-child(6) { animation-delay: 0.3s; }
+    .wave-bar:nth-child(7) { animation-delay: 0.6s; }
+
+    /* Print styles for GST Invoice */
+    @media print {
+      body * { visibility: hidden; }
+      #printableInvoice, #printableInvoice * { visibility: visible; }
+      #printableInvoice { position: absolute; left: 0; top: 0; width: 100%; border: none !important; box-shadow: none !important; }
+      .no-print { display: none !important; }
+    }
+  </style>
+</head>
+<body class="bg-[#FFFBFB] text-slate-800 font-sans min-h-screen flex flex-col antialiased selection:bg-rose-100 selection:text-rose-900">
+
+  <!-- Toast Notification Container -->
+  <div id="toastContainer" class="fixed top-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <!-- Announcement Bar -->
+  <div class="bg-gradient-to-r from-rose-700 via-pink-700 to-rose-700 text-rose-50 px-4 py-1.5 text-xs font-medium tracking-wide flex justify-between items-center overflow-x-auto whitespace-nowrap border-b border-rose-800/40">
+    <div class="flex items-center gap-2 mx-auto sm:mx-0">
+      <svg class="w-4 h-4 text-rose-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/></svg>
+      <span>Free Laser Engraving & Free Shipping across India on orders above ₹699</span>
+    </div>
+    <div class="hidden md:flex items-center gap-4 text-rose-200 text-[11px]">
+      <span>Support: +91 98200 12345</span>
+      <span>•</span>
+      <span class="text-white font-semibold">Small Gifts. Big Feelings.</span>
+    </div>
+  </div>
+
+  <!-- Main App Navigation Header -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-rose-100 shadow-xs">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+      
+      <!-- Brand Logo -->
+      <div onclick="switchView('store')" class="flex items-center gap-3 cursor-pointer select-none">
+        <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-rose-600 to-pink-500 flex items-center justify-center text-white shadow-md shadow-rose-200">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V3.5a2.5 2.5 0 10-5 0V8m5 0h7.5A2.5 2.5 0 0122 10.5v1.8a2.5 2.5 0 01-1.2 2.15L12 19l-8.8-4.55A2.5 2.5 0 012 12.3V10.5A2.5 2.5 0 014.5 8H12z"/></svg>
+        </div>
+        <div>
+          <span class="text-2xl font-black tracking-tight text-slate-900 flex items-center gap-1 font-serif">
+            Giftira<span class="w-2 h-2 rounded-full bg-rose-600 inline-block"></span>
+          </span>
+          <p class="text-[10px] text-rose-600 font-bold tracking-wider uppercase -mt-1 hidden sm:block">
+            Small Gifts. Big Feelings.
+          </p>
+        </div>
+      </div>
+
+      <!-- Quick Indian Pincode Pill (Desktop) -->
+      <div onclick="promptPincode()" class="hidden lg:flex items-center gap-2 bg-rose-50/80 hover:bg-rose-100 border border-rose-200 rounded-full px-4 py-1.5 text-xs text-slate-700 cursor-pointer transition">
+        <svg class="w-3.5 h-3.5 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+        <span>Delivering to: <strong id="navPincodeLabel">361001 (Jamnagar)</strong></span>
+        <span class="text-rose-600 font-bold underline ml-1">Change</span>
+      </div>
+
+      <!-- Navigation Buttons -->
+      <div class="flex items-center gap-2 sm:gap-3">
+        <button onclick="switchView('store')" id="navStoreBtn" class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition text-rose-700 bg-rose-50">
+          Gifts
+        </button>
+
+        <button onclick="switchView('hamper')" id="navHamperBtn" class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-1.5 text-rose-700 hover:bg-rose-50 border border-rose-200">
+          <svg class="w-4 h-4 text-amber-500" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          <span>Build Hamper</span>
+        </button>
+
+        <button onclick="switchView('orders')" id="navOrdersBtn" class="hidden sm:flex px-3 py-2 rounded-xl text-xs sm:text-sm font-medium transition text-slate-600 hover:text-slate-900 items-center gap-1">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+          <span>Track Orders</span>
+        </button>
+
+        <button onclick="switchView('admin')" title="Admin Dashboard" class="p-2 rounded-xl text-slate-500 hover:text-slate-900 border border-slate-200 hover:bg-slate-50 transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+        </button>
+
+        <!-- Cart Button -->
+        <button onclick="toggleCartDrawer(true)" class="relative p-2.5 rounded-full bg-slate-900 text-white hover:bg-rose-600 transition shadow-sm ml-1">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+          <span id="cartBadge" class="absolute -top-1 -right-1 bg-rose-500 text-white font-bold rounded-full w-5 h-5 flex items-center justify-center text-[10px] ring-2 ring-white">0</span>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ==========================================
+       MAIN VIEW CONTAINER (SPA VIEW ROUTING)
+       ========================================== -->
+  <main class="flex-1 pb-20">
+
+    <!-- -----------------------------------------
+         VIEW 1: STORE / CATALOG
+         ----------------------------------------- -->
+    <div id="viewStore" class="space-y-8">
+      
+      <!-- Hero Section -->
+      <section class="bg-gradient-to-b from-rose-100/70 via-rose-50/40 to-[#FFFBFB] py-12 px-4 sm:px-6 lg:px-8 border-b border-rose-100 text-center">
+        <div class="max-w-4xl mx-auto space-y-4">
+          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-rose-200 shadow-xs text-rose-700 text-xs font-bold">
+            <svg class="w-4 h-4 text-amber-500" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <span>Affordable Custom Gifting Across India • ₹199 to ₹999</span>
+          </div>
+
+          <h1 class="text-3xl sm:text-5xl font-black text-slate-900 font-serif leading-tight">
+            Personalized keepsakes for people who matter. <br>
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-rose-600 via-pink-600 to-amber-600">
+              Small Gifts. Big Feelings.
+            </span>
+          </h1>
+
+          <p class="text-sm sm:text-base text-slate-600 max-w-2xl mx-auto leading-relaxed">
+            Turn your favorite memories, songs, and vows into scannable Spotify acrylic plaques, warm bedside LED lamps, and handcrafted gift hampers.
+          </p>
+
+          <!-- Search & Instant PIN Code Checker -->
+          <div class="max-w-2xl mx-auto pt-3 flex flex-col sm:flex-row gap-2">
+            <div class="relative flex-1">
+              <svg class="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+              <input type="text" id="searchInput" oninput="handleSearchFilter()" placeholder="Search plaque, LED lamp, wallet, combos..." class="w-full pl-10 pr-4 py-2.5 bg-white border border-rose-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 shadow-xs">
+            </div>
+            <div class="flex gap-2">
+              <input type="text" id="pincodeFastCheckInput" placeholder="PIN Code (e.g. 361001)" maxlength="6" class="w-36 px-3 py-2.5 bg-white border border-rose-200 rounded-xl text-xs sm:text-sm text-center font-bold focus:outline-none focus:ring-2 focus:ring-rose-500 shadow-xs">
+              <button onclick="handleVerifyQuickPincode()" class="px-4 py-2.5 bg-slate-900 text-white rounded-xl text-xs font-bold hover:bg-rose-700 transition">
+                Check Delivery
+              </button>
+            </div>
+          </div>
+
+          <!-- Serviceability Status Alert -->
+          <div id="serviceabilityBanner" class="text-xs text-slate-700 pt-1 flex items-center justify-center gap-1.5">
+            <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <span id="serviceabilityBannerText">Serviceable in <strong>Jamnagar, Gujarat (361001)</strong> via BlueDart Express • Est. <strong>2 Days</strong></span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Custom Hamper Builder Callout Banner -->
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="bg-gradient-to-r from-rose-950 via-rose-900 to-pink-950 rounded-3xl p-6 sm:p-8 text-white shadow-xl flex flex-col md:flex-row items-center justify-between gap-6 relative overflow-hidden">
+          <div class="space-y-3 z-10 max-w-xl text-center md:text-left">
+            <span class="bg-rose-700/80 text-rose-200 text-xs px-3 py-1 rounded-full font-bold uppercase tracking-wider">
+              Interactive Gift Studio
+            </span>
+            <h3 class="text-2xl sm:text-3xl font-extrabold font-serif">
+              Build Your Own Gift Hamper in 4 Steps
+            </h3>
+            <p class="text-rose-100 text-xs sm:text-sm leading-relaxed">
+              Choose your keepsake box, select 3 to 6 curated gifts, write a wax-sealed handwritten greeting card, and add warm fairy lights.
+            </p>
+            <button onclick="switchView('hamper')" class="mt-2 px-6 py-3 bg-amber-400 hover:bg-amber-300 text-slate-900 font-bold rounded-xl shadow-lg transition flex items-center gap-2 mx-auto md:mx-0 text-sm">
+              <span>Start Hamper Studio</span>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+            </button>
+          </div>
+          <div class="w-48 h-48 sm:w-56 sm:h-56 shrink-0 rounded-2xl overflow-hidden border-2 border-rose-300/30 shadow-2xl">
+            <img src="https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=600&q=80" alt="Hamper" class="w-full h-full object-cover">
+          </div>
+        </div>
+      </div>
+
+      <!-- Filter Tabs: Occasions & Pricing -->
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4">
+        
+        <!-- Occasion Filter Chips -->
+        <div class="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none text-xs">
+          <span class="font-bold uppercase text-slate-400 tracking-wider mr-2 shrink-0">Occasion:</span>
+          <button onclick="setOccasionFilter('All')" class="occasion-chip active px-4 py-2 rounded-xl font-bold bg-slate-900 text-white shadow-xs shrink-0" data-occ="All">All Gifts</button>
+          <button onclick="setOccasionFilter('Birthday')" class="occasion-chip px-4 py-2 rounded-xl font-medium bg-white border border-rose-200 text-slate-700 hover:bg-rose-50 shrink-0" data-occ="Birthday">Birthday 🎂</button>
+          <button onclick="setOccasionFilter('Anniversary')" class="occasion-chip px-4 py-2 rounded-xl font-medium bg-white border border-rose-200 text-slate-700 hover:bg-rose-50 shrink-0" data-occ="Anniversary">Anniversary 💍</button>
+          <button onclick="setOccasionFilter('Valentine\'s')" class="occasion-chip px-4 py-2 rounded-xl font-medium bg-white border border-rose-200 text-slate-700 hover:bg-rose-50 shrink-0" data-occ="Valentine's">Valentine's ❤️</button>
+          <button onclick="setOccasionFilter('Best Friend')" class="occasion-chip px-4 py-2 rounded-xl font-medium bg-white border border-rose-200 text-slate-700 hover:bg-rose-50 shrink-0" data-occ="Best Friend">Best Friends 👯‍♀️</button>
+          <button onclick="setOccasionFilter('Corporate')" class="occasion-chip px-4 py-2 rounded-xl font-medium bg-white border border-rose-200 text-slate-700 hover:bg-rose-50 shrink-0" data-occ="Corporate">Corporate 💼</button>
+        </div>
+
+        <!-- Price Tier Filter Chips -->
+        <div class="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none text-xs">
+          <span class="font-bold uppercase text-slate-400 tracking-wider mr-2 shrink-0">Price Tier:</span>
+          <button onclick="setPriceFilter('All')" class="price-chip active px-3 py-1.5 rounded-lg font-bold bg-rose-600 text-white shrink-0" data-price="All">All (₹199 - ₹999)</button>
+          <button onclick="setPriceFilter('under-499')" class="price-chip px-3 py-1.5 rounded-lg font-medium bg-white border border-slate-200 text-slate-600 hover:border-slate-300 shrink-0" data-price="under-499">Under ₹499</button>
+          <button onclick="setPriceFilter('499-799')" class="price-chip px-3 py-1.5 rounded-lg font-medium bg-white border border-slate-200 text-slate-600 hover:border-slate-300 shrink-0" data-price="499-799">₹499 – ₹799</button>
+          <button onclick="setPriceFilter('799-999')" class="price-chip px-3 py-1.5 rounded-lg font-medium bg-white border border-slate-200 text-slate-600 hover:border-slate-300 shrink-0" data-price="799-999">₹799 – ₹999</button>
+        </div>
+
+      </div>
+
+      <!-- Products Grid -->
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- Dynamic Products injected via JavaScript -->
+        </div>
+      </div>
+
+    </div>
+
+    <!-- -----------------------------------------
+         VIEW 2: 4-STEP HAMPER BUILDER
+         ----------------------------------------- -->
+    <div id="viewHamper" class="hidden max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+      
+      <!-- Wizard Title -->
+      <div class="text-center space-y-2">
+        <span class="text-xs font-bold uppercase tracking-wider text-rose-600 bg-rose-50 px-3 py-1 rounded-full border border-rose-200">
+          Interactive Hamper Studio
+        </span>
+        <h2 class="text-2xl sm:text-4xl font-black text-slate-900 font-serif">
+          Build Your Custom Gift Hamper
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-600 max-w-xl mx-auto">
+          Hand-curate every detail: choose your luxury trunk, select 3 to 6 thoughtful gifts, pen a heartfelt wax-sealed note, and add warm fairy lights.
+        </p>
+      </div>
+
+      <!-- Step Indicator Bar -->
+      <div class="flex items-center justify-between max-w-2xl mx-auto mb-8">
+        <div onclick="setHamperStep(1)" class="hamper-step-nav cursor-pointer flex-1 flex flex-col items-center">
+          <div id="stepCircle1" class="w-9 h-9 rounded-full bg-rose-600 text-white flex items-center justify-center text-xs font-bold ring-4 ring-rose-100 shadow-md">1</div>
+          <span class="text-[11px] font-bold text-rose-700 mt-1.5 hidden sm:block">1. Keepsake Box</span>
+        </div>
+        <div onclick="setHamperStep(2)" class="hamper-step-nav cursor-pointer flex-1 flex flex-col items-center">
+          <div id="stepCircle2" class="w-9 h-9 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-xs font-bold">2</div>
+          <span class="text-[11px] font-medium text-slate-500 mt-1.5 hidden sm:block">2. Pick 3-6 Items</span>
+        </div>
+        <div onclick="setHamperStep(3)" class="hamper-step-nav cursor-pointer flex-1 flex flex-col items-center">
+          <div id="stepCircle3" class="w-9 h-9 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-xs font-bold">3</div>
+          <span class="text-[11px] font-medium text-slate-500 mt-1.5 hidden sm:block">3. Card & Note</span>
+        </div>
+        <div onclick="setHamperStep(4)" class="hamper-step-nav cursor-pointer flex-1 flex flex-col items-center">
+          <div id="stepCircle4" class="w-9 h-9 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-xs font-bold">4</div>
+          <span class="text-[11px] font-medium text-slate-500 mt-1.5 hidden sm:block">4. Final Touches</span>
+        </div>
+      </div>
+
+      <!-- STEP 1 CONTAINER -->
+      <div id="hamperStep1" class="space-y-6">
+        <h3 class="text-base sm:text-lg font-bold text-slate-900 text-center">
+          Step 1: Choose Your Outer Keepsake Box or Wooden Crate
+        </h3>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6" id="hamperBoxesContainer">
+          <!-- Rendered dynamically -->
+        </div>
+      </div>
+
+      <!-- STEP 2 CONTAINER -->
+      <div id="hamperStep2" class="hidden space-y-6">
+        <div class="flex justify-between items-center bg-rose-50 p-4 rounded-2xl border border-rose-200">
+          <div>
+            <h3 class="font-bold text-slate-900 text-sm">Step 2: Pick 3 to 6 Curated Gifts</h3>
+            <p class="text-xs text-slate-600">Select thoughtfully curated items for your recipient.</p>
+          </div>
+          <span id="hamperItemCountBadge" class="px-3.5 py-1.5 bg-white font-extrabold text-xs rounded-full border border-rose-300 text-rose-700 shadow-xs">
+            0 of 6 Selected
+          </span>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4" id="hamperItemsContainer">
+          <!-- Rendered dynamically -->
+        </div>
+      </div>
+
+      <!-- STEP 3 CONTAINER -->
+      <div id="hamperStep3" class="hidden space-y-6 max-w-2xl mx-auto">
+        <h3 class="text-base sm:text-lg font-bold text-slate-900 text-center">
+          Step 3: Select Greeting Card & Compose Note
+        </h3>
+        
+        <div class="grid grid-cols-2 gap-3" id="hamperCardTemplatesContainer">
+          <!-- Rendered dynamically -->
+        </div>
+
+        <div class="bg-amber-50/80 border border-amber-200 rounded-3xl p-5 space-y-3 shadow-xs">
+          <div class="flex justify-between items-center">
+            <label class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+              <svg class="w-4 h-4 text-amber-600" fill="currentColor" viewBox="0 0 20 20"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"/><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd"/></svg>
+              <span>Handwritten Card Inscription</span>
+            </label>
+            <span class="text-[10px] text-amber-800 font-semibold">Printed on 300 GSM Textured Ivory Card</span>
+          </div>
+          <textarea id="hamperCardMessage" rows="4" class="w-full p-3.5 bg-white border border-amber-200 rounded-2xl text-xs sm:text-sm font-serif focus:ring-2 focus:ring-rose-500 focus:outline-none" placeholder="Write your warm wishes here..."></textarea>
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-semibold text-slate-600">Sign-off:</span>
+            <input type="text" id="hamperSenderName" class="flex-1 px-3 py-1.5 bg-white border border-amber-200 rounded-xl text-xs focus:outline-none" placeholder="e.g. Always yours, Kunal">
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 4 CONTAINER -->
+      <div id="hamperStep4" class="hidden space-y-6 max-w-2xl mx-auto">
+        <h3 class="text-base sm:text-lg font-bold text-slate-900 text-center">
+          Step 4: Finishing Luxury Touches
+        </h3>
+
+        <div class="space-y-3" id="hamperTouchesContainer">
+          <!-- Rendered dynamically -->
+        </div>
+
+        <!-- Hamper Pricing Review -->
+        <div class="bg-white rounded-3xl border border-rose-200 p-5 shadow-xs space-y-3">
+          <h4 class="font-bold text-xs uppercase tracking-wider text-slate-400">Hamper Summary</h4>
+          <div class="flex justify-between text-xs text-slate-700">
+            <span>Outer Keepsake Box:</span>
+            <span id="summaryBoxCost">₹0</span>
+          </div>
+          <div class="flex justify-between text-xs text-slate-700">
+            <span>Curated Gifts:</span>
+            <span id="summaryItemsCost">₹0</span>
+          </div>
+          <div class="flex justify-between text-xs text-slate-700">
+            <span>Finishing Upgrades:</span>
+            <span id="summaryTouchesCost">₹0</span>
+          </div>
+          <div class="pt-2 border-t border-rose-100 flex justify-between font-black text-base text-slate-900">
+            <span>Total Hamper Value</span>
+            <span id="summaryHamperTotal" class="text-rose-600">₹0</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Wizard Navigation Controls -->
+      <div class="flex justify-between items-center max-w-2xl mx-auto pt-6 border-t border-rose-100">
+        <button id="hamperBackBtn" onclick="prevHamperStep()" class="px-5 py-2.5 rounded-xl border border-slate-300 text-xs font-semibold hover:bg-slate-50 transition invisible">
+          Back
+        </button>
+        <button id="hamperNextBtn" onclick="nextHamperStep()" class="px-6 py-2.5 bg-slate-900 text-white rounded-xl text-xs font-bold hover:bg-rose-600 transition flex items-center gap-1.5">
+          <span>Proceed to Step 2</span>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- -----------------------------------------
+         VIEW 3: TRACK ORDERS & PRODUCTION SPECS
+         ----------------------------------------- -->
+    <div id="viewOrders" class="hidden max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+      <div class="flex justify-between items-center">
+        <div>
+          <h2 class="text-2xl sm:text-3xl font-black text-slate-900 font-serif">Track Your Gifts</h2>
+          <p class="text-xs text-slate-500 mt-1">Real-time laser engraving updates, quality check milestones, and courier air-waybills.</p>
+        </div>
+        <button onclick="switchView('store')" class="text-xs font-bold text-rose-600 hover:underline">Continue Shopping</button>
+      </div>
+      <div id="ordersListContainer" class="space-y-4">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+
+    <!-- -----------------------------------------
+         VIEW 4: ADMIN / SELLER PRODUCTION PORTAL
+         ----------------------------------------- -->
+    <div id="viewAdmin" class="hidden max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+      <div class="flex justify-between items-center">
+        <div>
+          <h2 class="text-2xl font-black text-slate-900 font-serif flex items-center gap-2">
+            <span>Giftira Production & Seller Hub</span>
+            <span class="text-xs bg-rose-100 text-rose-700 font-sans px-2.5 py-0.5 rounded-full font-bold">Confidential</span>
+          </h2>
+          <p class="text-xs text-slate-500 mt-1">Review live uploaded artwork photos, laser inscriptions, and advance fulfillment statuses.</p>
+        </div>
+        <button onclick="switchView('store')" class="px-4 py-2 bg-slate-900 text-white rounded-xl text-xs font-bold hover:bg-rose-700 transition">
+          Back to Store
+        </button>
+      </div>
+
+      <!-- Quick Metrics -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <div class="p-4 bg-white rounded-2xl border border-rose-100 shadow-xs">
+          <span class="text-xs text-slate-400 font-medium">Orders in Queue</span>
+          <p id="adminOrdersCount" class="text-2xl font-black text-slate-900 mt-1">0</p>
+        </div>
+        <div class="p-4 bg-white rounded-2xl border border-rose-100 shadow-xs">
+          <span class="text-xs text-slate-400 font-medium">Laser Inscription SLA</span>
+          <p class="text-2xl font-black text-emerald-600 mt-1">24 Hours</p>
+        </div>
+        <div class="p-4 bg-white rounded-2xl border border-rose-100 shadow-xs">
+          <span class="text-xs text-slate-400 font-medium">Pan-India Pincodes</span>
+          <p class="text-2xl font-black text-slate-900 mt-1">19,000+</p>
+        </div>
+        <div class="p-4 bg-white rounded-2xl border border-rose-100 shadow-xs">
+          <span class="text-xs text-slate-400 font-medium">Active Coupons</span>
+          <p class="text-2xl font-black text-slate-900 mt-1">3 Codes</p>
+        </div>
+      </div>
+
+      <!-- Admin Orders Table -->
+      <div class="bg-white rounded-3xl border border-rose-100 shadow-xs overflow-hidden">
+        <div class="p-4 border-b border-rose-50 flex justify-between items-center">
+          <h3 class="font-bold text-xs uppercase tracking-wider text-slate-700">Live Production & Personalization Queue</h3>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-slate-50 text-slate-500 font-semibold border-b border-slate-200 uppercase tracking-wider">
+              <tr>
+                <th class="p-3">Order ID</th>
+                <th class="p-3">Recipient & City</th>
+                <th class="p-3">Customization / Artwork</th>
+                <th class="p-3">Status</th>
+                <th class="p-3">Fulfillment Action</th>
+              </tr>
+            </thead>
+            <tbody id="adminOrdersTableBody" class="divide-y divide-slate-100 text-slate-700">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ==========================================
+       SLIDE-OVER SHOPPING BAG DRAWER
+       ========================================== -->
+  <div id="cartDrawerBackdrop" onclick="toggleCartDrawer(false)" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs transition-opacity hidden"></div>
+  <div id="cartDrawer" class="fixed top-0 right-0 z-50 h-full w-full max-w-md bg-white shadow-2xl flex flex-col transform translate-x-full transition-transform duration-300">
+    
+    <!-- Drawer Header -->
+    <div class="p-5 border-b border-rose-100 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <svg class="w-5 h-5 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+        <h3 class="font-black text-slate-900 text-base font-serif">Your Gifting Bag</h3>
+        <span id="drawerItemsCount" class="text-xs bg-rose-100 text-rose-700 font-bold px-2 py-0.5 rounded-full">0</span>
+      </div>
+      <button onclick="toggleCartDrawer(false)" class="p-1 rounded-full text-slate-400 hover:text-slate-800">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+
+    <!-- Free Shipping Progress -->
+    <div class="bg-rose-50/80 px-5 py-3 border-b border-rose-100 space-y-1.5">
+      <div class="flex justify-between text-xs font-bold text-rose-900">
+        <span id="freeShippingLabel">Add ₹699 for Free Delivery</span>
+        <span id="freeShippingTarget">₹699</span>
+      </div>
+      <div class="w-full h-1.5 bg-rose-200 rounded-full overflow-hidden">
+        <div id="freeShippingProgressBar" class="h-full bg-rose-600 transition-all duration-300" style="width: 0%;"></div>
+      </div>
+    </div>
+
+    <!-- Items Container -->
+    <div id="cartItemsList" class="flex-1 overflow-y-auto p-5 space-y-4">
+      <!-- Dynamic cart items -->
+    </div>
+
+    <!-- Packaging & Coupon Extras -->
+    <div class="p-5 border-t border-rose-100 bg-slate-50 space-y-3 text-xs">
+      
+      <!-- Gift Wrap Checkbox -->
+      <label class="flex items-center justify-between p-2.5 rounded-xl border border-slate-200 bg-white cursor-pointer hover:border-rose-300 transition">
+        <div class="flex items-center gap-2">
+          <input type="checkbox" id="giftWrapCheckbox" onchange="toggleGiftWrap(this.checked)" class="w-4 h-4 text-rose-600 rounded">
+          <span class="font-semibold text-slate-800">Add Satin Ribbon & Wax Sealed Gift Wrap</span>
+        </div>
+        <span class="font-bold text-rose-600">+₹49</span>
+      </label>
+
+      <!-- Promo Code Input -->
+      <div class="space-y-1">
+        <div class="flex gap-2">
+          <input type="text" id="couponInput" placeholder="Promo code (e.g. FIRSTGIFT)" class="flex-1 px-3 py-2 bg-white border border-slate-300 rounded-xl uppercase font-mono tracking-wider focus:outline-none focus:ring-2 focus:ring-rose-500">
+          <button onclick="applyCoupon()" class="px-4 py-2 bg-slate-900 text-white font-bold rounded-xl hover:bg-rose-600 transition">Apply</button>
+        </div>
+        <div id="appliedCouponTag" class="hidden flex justify-between items-center text-[11px] text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-200">
+          <span id="appliedCouponText">Coupon applied!</span>
+          <button onclick="removeCoupon()" class="text-slate-500 underline font-bold">Remove</button>
+        </div>
+      </div>
+
+      <!-- Financial Totals -->
+      <div class="space-y-1 text-slate-600 pt-1 border-t border-slate-200 text-xs">
+        <div class="flex justify-between">
+          <span>Item Total</span>
+          <span id="cartSubtotalText" class="font-bold text-slate-900">₹0</span>
+        </div>
+        <div id="couponDiscountRow" class="hidden flex justify-between text-emerald-700 font-semibold">
+          <span>Promo Discount</span>
+          <span id="cartDiscountText">-₹0</span>
+        </div>
+        <div class="flex justify-between">
+          <span>Pan-India Delivery</span>
+          <span id="cartDeliveryFeeText">₹49</span>
+        </div>
+        <div id="wrapFeeRow" class="hidden flex justify-between">
+          <span>Luxury Ribbon Gift Wrap</span>
+          <span class="font-bold">₹49</span>
+        </div>
+        <div class="pt-2 border-t border-slate-200 flex justify-between font-black text-base text-slate-900">
+          <span>To Pay</span>
+          <span id="cartFinalTotalText" class="text-rose-600">₹0</span>
+        </div>
+      </div>
+
+      <!-- Proceed to Checkout Button -->
+      <button onclick="openCheckoutModal()" class="w-full py-3.5 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-2xl shadow-lg shadow-rose-200 transition flex items-center justify-center gap-2">
+        <span>Proceed to Secure Checkout</span>
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+      </button>
+
+      <p class="text-[10px] text-center text-slate-400">
+        🔒 256-Bit SSL Encrypted Indian Payments (UPI, Cards, COD)
+      </p>
+
+    </div>
+
+  </div>
+
+  <!-- ==========================================
+       LIVE PERSONALIZATION STUDIO MODAL
+       ========================================== -->
+  <div id="studioModal" class="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-y-auto p-6 sm:p-8 shadow-2xl border border-rose-100 relative space-y-6">
+      
+      <button onclick="closePersonalizationStudio()" class="absolute top-5 right-5 p-2 rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-800">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+
+      <div class="border-b border-rose-100 pb-3">
+        <span class="text-xs font-bold text-rose-600 uppercase tracking-wider">Live Laser Engraving Studio</span>
+        <h2 id="studioProductName" class="text-xl sm:text-2xl font-black text-slate-900 font-serif">Product Customizer</h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+        
+        <!-- Left: Live Rendered Mockup (6 cols) -->
+        <div class="md:col-span-6 bg-slate-100/70 p-5 rounded-3xl border border-slate-200 flex flex-col items-center justify-center relative">
+          
+          <div class="w-full flex justify-between items-center text-[11px] font-bold text-slate-500 mb-3">
+            <span class="flex items-center gap-1 text-rose-700">
+              <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/></svg>
+              Live Render Preview
+            </span>
+            <span id="studioMockupBadge" class="bg-white px-2 py-0.5 rounded shadow-xs">UV Engraved</span>
+          </div>
+
+          <!-- MOCKUP A: SPOTIFY ACRYLIC PLAQUE -->
+          <div id="mockupSpotify" class="w-full max-w-xs aspect-4/5 bg-slate-950 rounded-2xl shadow-2xl p-4 flex flex-col justify-between overflow-hidden border-4 border-slate-900 text-center">
+            <div class="flex-1 flex flex-col items-center justify-center">
+              <div class="w-44 h-44 rounded-xl overflow-hidden shadow-inner border border-white/20 bg-slate-800 relative">
+                <img id="mockupSpotifyImg" src="https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=600&q=80" alt="Preview Photo" class="w-full h-full object-cover">
+              </div>
+
+              <!-- Song details -->
+              <p id="mockupSpotifyTitle" class="text-white font-bold text-xs tracking-wide truncate px-2 mt-3">
+                Kesariya - Arijit Singh
+              </p>
+
+              <!-- Animated Sound wave -->
+              <div class="flex items-center justify-center gap-1 py-1.5">
+                <span class="w-1 bg-white/70 rounded-full wave-bar"></span>
+                <span class="w-1 bg-white rounded-full wave-bar"></span>
+                <span class="w-1 bg-white rounded-full wave-bar"></span>
+                <span class="w-1 bg-white/60 rounded-full wave-bar"></span>
+                <span class="w-1 bg-white rounded-full wave-bar"></span>
+                <span class="w-1 bg-white rounded-full wave-bar"></span>
+                <span class="w-1 bg-white/70 rounded-full wave-bar"></span>
+              </div>
+
+              <!-- Progress bar -->
+              <div class="w-4/5 mx-auto space-y-1">
+                <div class="w-full h-1 bg-white/30 rounded-full overflow-hidden">
+                  <div class="w-1/3 h-full bg-white"></div>
+                </div>
+                <div class="flex justify-between text-[9px] text-white/70 font-mono">
+                  <span>01:24</span>
+                  <span>03:45</span>
+                </div>
+              </div>
+
+              <!-- Inscribed Custom Text -->
+              <div class="pt-2 border-t border-white/10 w-full mt-2">
+                <p id="mockupSpotifyText" class="text-amber-200 text-xs font-serif truncate">
+                  "Rohit & Sneha • Forever"
+                </p>
+              </div>
+            </div>
+
+            <!-- Wooden Stand -->
+            <div class="w-3/4 mx-auto h-3 bg-amber-800 rounded-t-sm shadow-md border-t border-amber-600"></div>
+          </div>
+
+          <!-- MOCKUP B: LED WARM GLOW LAMP -->
+          <div id="mockupLamp" class="hidden w-full max-w-xs aspect-4/5 bg-gradient-to-b from-stone-900 to-black rounded-2xl shadow-2xl p-5 flex flex-col justify-between overflow-hidden border-8 border-stone-800 text-center">
+            <div class="flex-1 flex flex-col items-center justify-center">
+              <div class="w-44 h-44 rounded-2xl overflow-hidden border-2 border-amber-300/40 shadow-[0_0_35px_rgba(251,191,36,0.35)] relative">
+                <img id="mockupLampImg" src="https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=600&q=80" alt="Preview Photo" class="w-full h-full object-cover">
+              </div>
+              <p id="mockupLampText" class="text-amber-300 text-sm mt-4 drop-shadow-[0_0_12px_rgba(252,211,77,0.8)] font-serif">
+                "To the moon & back ✨"
+              </p>
+            </div>
+            <div class="w-full h-7 bg-amber-900/90 rounded-lg flex items-center justify-center text-[9px] text-amber-200 font-mono tracking-widest uppercase border border-amber-700/50">
+              Natural Beech Wood Stand • 3000K LED
+            </div>
+          </div>
+
+          <!-- MOCKUP C: CERAMIC MONOGRAM MUG -->
+          <div id="mockupMug" class="hidden w-full max-w-xs aspect-4/5 bg-white rounded-2xl shadow-xl p-6 flex flex-col items-center justify-center border border-rose-100 text-center">
+            <div class="w-36 h-36 rounded-full border-4 border-amber-300 flex items-center justify-center bg-rose-50/50 shadow-inner">
+              <span id="mockupMugInitial" class="text-6xl font-serif text-slate-800 font-black">A</span>
+            </div>
+            <h4 id="mockupMugName" class="text-xl text-slate-900 mt-4 font-serif">Ananya</h4>
+            <p class="text-xs text-slate-400 mt-1">24K Gold Rim Ivory Finish</p>
+          </div>
+
+          <p class="text-[11px] text-slate-400 text-center mt-3">
+            Precision fiber-laser engraving rendered live before production.
+          </p>
+        </div>
+
+        <!-- Right: Studio Controls (6 cols) -->
+        <div class="md:col-span-6 space-y-4">
+          
+          <div class="space-y-1">
+            <label class="block text-xs font-bold text-slate-700">
+              Engraved Name / Custom Inscription <span class="text-rose-500">*</span>
+            </label>
+            <input type="text" id="studioTextInput" oninput="updateLiveMockup()" maxlength="45" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-rose-500 focus:outline-none" placeholder="e.g. Kunal & Simran • 14.02.2024">
+            <div class="flex justify-between text-[10px] text-slate-400">
+              <span>Renders live on the keepsake mockup</span>
+              <span id="studioCharCount">0/45</span>
+            </div>
+          </div>
+
+          <!-- Song title (only for spotify plaque) -->
+          <div id="studioSongGroup" class="space-y-1">
+            <label class="block text-xs font-bold text-slate-700">
+              Spotify Track Title & Artist Name
+            </label>
+            <input type="text" id="studioSongInput" oninput="updateLiveMockup()" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-rose-500 focus:outline-none" placeholder="e.g. Kesariya - Arijit Singh">
+          </div>
+
+          <!-- Font Typography Selector -->
+          <div class="space-y-1.5">
+            <label class="block text-xs font-bold text-slate-700">Select Engraving Typography</label>
+            <div class="grid grid-cols-3 gap-2">
+              <button type="button" onclick="selectStudioFont('font-serif')" class="font-btn active p-2 rounded-xl border border-rose-600 bg-rose-50 text-center text-xs font-serif font-bold">Playfair Serif</button>
+              <button type="button" onclick="selectStudioFont('font-cinzel')" class="font-btn p-2 rounded-xl border border-slate-200 text-center text-xs font-cinzel font-bold">Cinzel Royal</button>
+              <button type="button" onclick="selectStudioFont('font-script')" class="font-btn p-2 rounded-xl border border-slate-200 text-center text-xs font-script font-bold">Dancing Script</button>
+            </div>
+          </div>
+
+          <!-- Photo Upload Simulator -->
+          <div id="studioPhotoGroup" class="space-y-2 border-t border-rose-100 pt-3">
+            <label class="block text-xs font-bold text-slate-700 flex justify-between">
+              <span>Upload Recipient / Memory Photo</span>
+              <span class="text-emerald-600 text-[10px]">HD UV Acrylic Print</span>
+            </label>
+            <label class="flex items-center gap-3 cursor-pointer border-2 border-dashed border-rose-300 hover:border-rose-500 bg-rose-50/40 rounded-2xl p-3 text-center transition">
+              <input type="file" accept="image/*" onchange="handleStudioPhotoUpload(event)" class="hidden">
+              <div class="w-10 h-10 rounded-xl bg-white border border-rose-200 flex items-center justify-center text-rose-600 shadow-xs shrink-0">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+              </div>
+              <div class="text-left flex-1">
+                <span class="text-xs font-bold text-rose-700 block">Tap to select photo from Phone / PC</span>
+                <span class="text-[10px] text-slate-400">JPG or PNG (Auto-crops into high resolution)</span>
+              </div>
+            </label>
+          </div>
+
+          <!-- Price & Add Button -->
+          <div class="pt-4 border-t border-rose-100 space-y-2">
+            <div class="flex justify-between items-baseline">
+              <span class="text-xs text-slate-500">Includes Free Customization & GST:</span>
+              <span id="studioPriceTag" class="text-2xl font-black text-slate-900">₹499</span>
+            </div>
+            <button onclick="savePersonalizationAndAddToCart()" class="w-full py-4 bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-700 hover:to-pink-700 text-white font-extrabold text-sm rounded-2xl shadow-lg shadow-rose-200 transition flex items-center justify-center gap-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+              <span>Confirm & Add to Gifting Bag</span>
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==========================================
+       INDIAN CHECKOUT MODAL
+       ========================================== -->
+  <div id="checkoutModal" class="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl max-w-4xl w-full max-h-[92vh] overflow-y-auto p-6 sm:p-8 shadow-2xl border border-rose-100 relative space-y-6">
+      
+      <button onclick="closeCheckoutModal()" class="absolute top-5 right-5 p-2 rounded-full hover:bg-slate-100 text-slate-400">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+
+      <div>
+        <span class="text-xs font-bold text-rose-600 uppercase tracking-wider">Fast Indian Checkout</span>
+        <h2 class="text-xl sm:text-2xl font-black text-slate-900 font-serif">Delivery & Payment Details</h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+        
+        <!-- Shipping Address Form (7 cols) -->
+        <div class="md:col-span-7 space-y-4">
+          
+          <!-- Discreet Gifting Toggle -->
+          <label class="flex items-start gap-3 p-3.5 bg-amber-50/80 border border-amber-200 rounded-2xl cursor-pointer">
+            <input type="checkbox" id="directToRecipientToggle" class="w-4 h-4 text-rose-600 rounded mt-0.5">
+            <div>
+              <span class="text-xs font-bold text-slate-900 block">Sending directly to recipient as a surprise?</span>
+              <p class="text-[11px] text-slate-600">We will omit price tags and invoice copies from the shipping box.</p>
+            </div>
+          </label>
+
+          <!-- Address Fields -->
+          <div class="space-y-3 bg-white p-4 rounded-2xl border border-slate-200">
+            <h4 class="font-bold text-xs uppercase tracking-wider text-slate-400">Shipping Destination</h4>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="text-[11px] font-bold text-slate-600 block mb-1">Recipient Name *</label>
+                <input type="text" id="chkName" value="Simran Kaur" class="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-rose-500 focus:outline-none">
+              </div>
+              <div>
+                <label class="text-[11px] font-bold text-slate-600 block mb-1">10-Digit Mobile (+91) *</label>
+                <input type="tel" id="chkPhone" maxlength="10" value="9876543210" class="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-rose-500 focus:outline-none">
+              </div>
+            </div>
+
+            <div>
+              <label class="text-[11px] font-bold text-slate-600 block mb-1">House / Flat / Building / Floor *</label>
+              <input type="text" id="chkHouse" value="Plot 12, Rose Villa" class="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-rose-500 focus:outline-none">
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="text-[11px] font-bold text-slate-600 block mb-1">Colony / Street / Area *</label>
+                <input type="text" id="chkStreet" value="Near Patel Colony, Ring Road" class="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-rose-500 focus:outline-none">
+              </div>
+              <div>
+                <label class="text-[11px] font-bold text-slate-600 block mb-1">Landmark (Optional)</label>
+                <input type="text" id="chkLandmark" value="Opp. Joggers Park" class="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-rose-500 focus:outline-none">
+              </div>
+            </div>
+
+            <div class="grid grid-cols-3 gap-2">
+              <div>
+                <label class="text-[11px] font-bold text-slate-600 block mb-1">PIN Code *</label>
+                <input type="text" id="chkPincode" maxlength="6" value="361001" oninput="handleCheckoutPincodeInput(this.value)" class="w-full px-2.5 py-2 border border-slate-300 rounded-xl text-xs font-bold text-center focus:ring-2 focus:ring-rose-500 focus:outline-none">
+              </div>
+              <div>
+                <label class="text-[11px] font-bold text-slate-600 block mb-1">City</label>
+                <input type="text" id="chkCity" value="Jamnagar" class="w-full px-2.5 py-2 border border-slate-200 bg-slate-50 rounded-xl text-xs">
+              </div>
+              <div>
+                <label class="text-[11px] font-bold text-slate-600 block mb-1">State</label>
+                <input type="text" id="chkState" value="Gujarat" class="w-full px-2.5 py-2 border border-slate-200 bg-slate-50 rounded-xl text-xs">
+              </div>
+            </div>
+          </div>
+
+          <!-- Payment Options Selection -->
+          <div class="space-y-2">
+            <h4 class="font-bold text-xs uppercase tracking-wider text-slate-400">Payment Method</h4>
+            
+            <label class="flex items-start gap-3 p-3.5 border-2 border-rose-600 bg-rose-50/60 rounded-2xl cursor-pointer">
+              <input type="radio" name="chkPayMode" value="upi" checked onchange="handlePaymentModeChange('upi')" class="mt-0.5 text-rose-600">
+              <div class="flex-1">
+                <div class="flex justify-between items-center">
+                  <span class="font-bold text-xs text-slate-900">Instant UPI (0% Gateway Fee)</span>
+                  <span class="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-full">Fastest</span>
+                </div>
+                <p class="text-[11px] text-slate-500 mt-0.5">Google Pay, PhonePe, Paytm, BHIM UPI</p>
+              </div>
+            </label>
+
+            <label class="flex items-start gap-3 p-3.5 border border-slate-200 rounded-2xl cursor-pointer hover:border-slate-300">
+              <input type="radio" name="chkPayMode" value="card" onchange="handlePaymentModeChange('card')" class="mt-0.5 text-rose-600">
+              <div class="flex-1">
+                <span class="font-bold text-xs text-slate-900">Debit / Credit Card / NetBanking (Razorpay)</span>
+                <p class="text-[11px] text-slate-500 mt-0.5">RuPay, Visa, MasterCard, All Major Indian Banks</p>
+              </div>
+            </label>
+
+            <label class="flex items-start gap-3 p-3.5 border border-slate-200 rounded-2xl cursor-pointer hover:border-slate-300">
+              <input type="radio" name="chkPayMode" value="cod" onchange="handlePaymentModeChange('cod')" class="mt-0.5 text-rose-600">
+              <div class="flex-1">
+                <div class="flex justify-between items-center">
+                  <span class="font-bold text-xs text-slate-900">Cash on Delivery (COD)</span>
+                  <span class="text-[10px] text-rose-600 font-bold">+₹49 Handling</span>
+                </div>
+                <p class="text-[11px] text-slate-500 mt-0.5">Custom engraved items require ₹49 advance handling verification.</p>
+              </div>
+            </label>
+          </div>
+
+        </div>
+
+        <!-- Right: Order Summary & Place Order Button (5 cols) -->
+        <div class="md:col-span-5 bg-slate-50 p-5 rounded-3xl border border-slate-200 space-y-4">
+          <h4 class="font-bold text-xs uppercase tracking-wider text-slate-700">Order Summary</h4>
+          
+          <div id="checkoutSummaryItems" class="max-h-48 overflow-y-auto space-y-2 pr-1 text-xs">
+            <!-- Dynamic mini list -->
+          </div>
+
+          <div class="space-y-1.5 pt-2 border-t border-slate-200 text-xs text-slate-600">
+            <div class="flex justify-between">
+              <span>Subtotal</span>
+              <span id="chkSubtotal" class="font-bold text-slate-900">₹0</span>
+            </div>
+            <div id="chkDiscountRow" class="hidden flex justify-between text-emerald-600 font-semibold">
+              <span>Coupon Savings</span>
+              <span id="chkDiscount">-₹0</span>
+            </div>
+            <div class="flex justify-between">
+              <span>Delivery Charges</span>
+              <span id="chkDelivery">₹0</span>
+            </div>
+            <div id="chkCodRow" class="hidden flex justify-between text-rose-600">
+              <span>COD Handling Charge</span>
+              <span>+₹49</span>
+            </div>
+            <div class="pt-2 border-t border-slate-200 flex justify-between text-base font-black text-slate-900">
+              <span>Total Payable</span>
+              <span id="chkTotal" class="text-rose-600">₹0</span>
+            </div>
+          </div>
+
+          <button onclick="executePaymentProcess()" class="w-full py-4 bg-slate-900 hover:bg-rose-700 text-white font-bold text-sm rounded-2xl shadow-lg transition flex items-center justify-center gap-2">
+            <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+            <span id="payButtonText">Pay & Place Gift Order</span>
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==========================================
+       SIMULATED UPI PAYMENT GATEWAY DIALOG
+       ========================================== -->
+  <div id="upiModal" class="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-rose-100 text-center space-y-4">
+      <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center mx-auto">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/></svg>
+      </div>
+
+      <div>
+        <h3 class="font-black text-lg text-slate-900 font-serif">Simulated UPI Gateway</h3>
+        <p class="text-xs text-slate-500">Scan QR Code with Google Pay, PhonePe or Paytm</p>
+      </div>
+
+      <!-- Stylized UPI QR Matrix -->
+      <div class="p-3 bg-slate-50 rounded-2xl border border-slate-200 inline-block">
+        <div class="w-40 h-40 bg-slate-900 p-2 rounded-xl flex flex-col justify-between text-white">
+          <div class="flex justify-between">
+            <div class="w-7 h-7 bg-white border-2 border-slate-900 flex items-center justify-center"><div class="w-3 h-3 bg-slate-900"></div></div>
+            <div class="w-7 h-7 bg-white border-2 border-slate-900 flex items-center justify-center"><div class="w-3 h-3 bg-slate-900"></div></div>
+          </div>
+          <p class="text-[9px] font-mono tracking-widest text-center text-rose-300">GIFTIRA-UPI</p>
+          <div class="flex justify-between items-end">
+            <div class="w-7 h-7 bg-white border-2 border-slate-900 flex items-center justify-center"><div class="w-3 h-3 bg-slate-900"></div></div>
+            <div class="w-6 h-6 bg-amber-400 rounded-full text-slate-900 font-black flex items-center justify-center text-[10px]">₹</div>
+          </div>
+        </div>
+        <span class="text-[10px] font-mono text-slate-600 block mt-1.5">VPA: pay@giftira</span>
+      </div>
+
+      <!-- UPI App Buttons -->
+      <div class="grid grid-cols-4 gap-2 pt-1">
+        <button onclick="confirmUpiSimulation('Google Pay')" class="p-2 border border-slate-200 rounded-xl text-[11px] font-bold text-blue-600 hover:bg-slate-50">GPay</button>
+        <button onclick="confirmUpiSimulation('PhonePe')" class="p-2 border border-slate-200 rounded-xl text-[11px] font-bold text-purple-600 hover:bg-slate-50">PhonePe</button>
+        <button onclick="confirmUpiSimulation('Paytm')" class="p-2 border border-slate-200 rounded-xl text-[11px] font-bold text-sky-600 hover:bg-slate-50">Paytm</button>
+        <button onclick="confirmUpiSimulation('BHIM')" class="p-2 border border-slate-200 rounded-xl text-[11px] font-bold text-emerald-600 hover:bg-slate-50">BHIM</button>
+      </div>
+
+      <button onclick="confirmUpiSimulation('UPI Intent')" class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-md transition">
+        Simulate 100% Payment Approval
+      </button>
+
+      <button onclick="closeUpiModal()" class="text-xs text-slate-400 hover:text-slate-600 font-semibold block mx-auto">
+        Cancel Transaction
+      </button>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       ORDER SUCCESS & TAX INVOICE SCREEN
+       ========================================== -->
+  <div id="orderSuccessModal" class="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl max-w-2xl w-full max-h-[92vh] overflow-y-auto p-6 sm:p-8 shadow-2xl border border-rose-100 text-center space-y-5">
+      
+      <div class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto shadow-inner">
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+      </div>
+
+      <div>
+        <span class="text-xs font-bold text-emerald-700 uppercase tracking-wider">Order Placed Successfully</span>
+        <h2 id="successRecipientTitle" class="text-2xl font-black text-slate-900 font-serif mt-1">Thank you!</h2>
+        <p class="text-xs text-slate-500 mt-1">
+          Order ID: <strong id="successOrderId" class="text-slate-800">GFT-849102</strong> • Tracking Air-Waybill generated.
+        </p>
+      </div>
+
+      <!-- 5-Stage Fulfillment Milestone -->
+      <div class="bg-rose-50/70 p-4 rounded-2xl border border-rose-100 text-left space-y-2">
+        <span class="text-xs font-bold text-rose-800 uppercase tracking-wide">Fulfillment Progress</span>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-xs">
+          <div class="p-2 bg-white rounded-xl border border-emerald-300 font-bold text-emerald-700">1. Placed ✅</div>
+          <div class="p-2 bg-white rounded-xl border border-amber-300 font-bold text-amber-700 animate-pulse">2. Engraving ⚡</div>
+          <div class="p-2 bg-white rounded-xl text-slate-400">3. QC Check</div>
+          <div class="p-2 bg-white rounded-xl text-slate-400">4. Dispatched</div>
+        </div>
+      </div>
+
+      <!-- Printable GST Tax Invoice Component -->
+      <div id="printableInvoice" class="border border-slate-200 rounded-2xl p-5 text-left text-xs space-y-3 bg-slate-50 font-sans">
+        <div class="flex justify-between items-start border-b border-slate-200 pb-3">
+          <div>
+            <h4 class="font-extrabold text-slate-900 text-sm">Giftira Gifting Innovations Pvt. Ltd.</h4>
+            <p class="text-slate-500">GSTIN: 24AAACG8892F1Z4 • Gujarat (State Code: 24)</p>
+          </div>
+          <button onclick="window.print()" class="no-print flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-slate-700 font-bold hover:bg-slate-100">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+            <span>Print Tax Invoice</span>
+          </button>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <span class="font-bold text-slate-700 block mb-0.5">Billed & Delivered To:</span>
+            <p id="invCustomerName" class="text-slate-800 font-semibold"></p>
+            <p id="invCustomerAddress" class="text-slate-600"></p>
+            <p id="invCustomerPhone" class="text-slate-500"></p>
+          </div>
+          <div>
+            <span class="font-bold text-slate-700 block mb-0.5">Tax Details:</span>
+            <p id="invPayMode" class="text-slate-600">Payment: Instant UPI</p>
+            <p class="text-slate-600">GST Breakdown: 9% CGST + 9% SGST included</p>
+            <p id="invGrandTotal" class="text-slate-900 font-extrabold text-sm mt-1">Total: ₹0</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex gap-3 justify-center pt-2">
+        <button onclick="switchView('orders'); closeSuccessModal();" class="px-6 py-2.5 bg-slate-900 text-white rounded-xl text-xs font-bold hover:bg-slate-800 transition">
+          Track in My Orders
+        </button>
+        <button onclick="switchView('store'); closeSuccessModal();" class="px-6 py-2.5 border border-slate-300 text-slate-700 rounded-xl text-xs font-semibold hover:bg-slate-50 transition">
+          Back to Store
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Mobile Bottom Sticky Navigation -->
+  <div class="sm:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-rose-100 px-4 py-2 flex justify-around items-center text-[10px] font-bold">
+    <button onclick="switchView('store')" class="flex flex-col items-center gap-1 text-rose-600">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V3.5a2.5 2.5 0 10-5 0V8m5 0h7.5A2.5 2.5 0 0122 10.5v1.8a2.5 2.5 0 01-1.2 2.15L12 19l-8.8-4.55A2.5 2.5 0 012 12.3V10.5A2.5 2.5 0 014.5 8H12z"/></svg>
+      <span>Store</span>
+    </button>
+    <button onclick="switchView('hamper')" class="flex flex-col items-center gap-1 text-slate-500">
+      <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+      <span>Hamper</span>
+    </button>
+    <button onclick="switchView('orders')" class="flex flex-col items-center gap-1 text-slate-500">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+      <span>Orders</span>
+    </button>
+    <button onclick="toggleCartDrawer(true)" class="flex flex-col items-center gap-1 text-slate-500 relative">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+      <span>Bag</span>
+    </button>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-slate-950 text-slate-300 pt-12 pb-20 sm:pb-8 border-t border-slate-900 text-xs">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 mb-10">
+      
+      <div class="space-y-3">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-xl bg-rose-600 flex items-center justify-center text-white font-bold">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V3.5a2.5 2.5 0 10-5 0V8m5 0h7.5A2.5 2.5 0 0122 10.5v1.8a2.5 2.5 0 01-1.2 2.15L12 19l-8.8-4.55A2.5 2.5 0 012 12.3V10.5A2.5 2.5 0 014.5 8H12z"/></svg>
+          </div>
+          <span class="text-xl font-black text-white font-serif">Giftira</span>
+        </div>
+        <p class="text-slate-400 text-xs leading-relaxed">
+          Small Gifts. Big Feelings. Thoughtful personalized gifting brand specializing in Spotify acrylic plaques, ambient LED night lamps, and bespoke gift hampers.
+        </p>
+        <p class="text-slate-500 text-[11px]">
+          GSTIN: 24AAACG8892F1Z4
+        </p>
+      </div>
+
+      <div class="space-y-2">
+        <h4 class="text-white font-bold text-sm">Gifting Occasions</h4>
+        <ul class="space-y-1 text-slate-400">
+          <li>Birthday Keepsake Lamps</li>
+          <li>Anniversary Acrylic Plaques</li>
+          <li>Soul Sister BFF Gift Combos</li>
+          <li>Valentine's Romantic Boxes</li>
+          <li>Corporate & Farewell Mementos</li>
+        </ul>
+      </div>
+
+      <div class="space-y-2">
+        <h4 class="text-white font-bold text-sm">Support & Logistics</h4>
+        <ul class="space-y-1 text-slate-400">
+          <li>WhatsApp: +91 98200 12345</li>
+          <li>Email: care@giftira.in</li>
+          <li>Pan-India PIN Code Verification</li>
+          <li>BlueDart & Delhivery Priority Air</li>
+          <li>Transit Safe Packaging Guarantee</li>
+        </ul>
+      </div>
+
+      <div class="space-y-2">
+        <h4 class="text-white font-bold text-sm">Verified Indian Payment Modes</h4>
+        <p class="text-slate-400 text-xs">
+          Instant UPI via PhonePe, Google Pay, Paytm, BHIM, RuPay cards, and Cash on Delivery.
+        </p>
+        <div class="pt-2 flex flex-wrap gap-1.5 text-[10px]">
+          <span class="bg-slate-900 border border-slate-800 px-2 py-1 rounded text-rose-300 font-bold">UPI 0% Fee</span>
+          <span class="bg-slate-900 border border-slate-800 px-2 py-1 rounded text-slate-300">RuPay</span>
+          <span class="bg-slate-900 border border-slate-800 px-2 py-1 rounded text-slate-300">NetBanking</span>
+          <span class="bg-slate-900 border border-slate-800 px-2 py-1 rounded text-emerald-400">Cash on Delivery</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 border-t border-slate-900 flex flex-col sm:flex-row justify-between items-center text-slate-500 text-[11px] gap-2">
+      <p>© 2026 Giftira Gifting Innovations Private Limited. All rights reserved.</p>
+      <p>Handcrafted with ❤️ for cherished moments across India.</p>
+    </div>
+  </footer>
+
+  <!-- ==========================================
+       JAVASCRIPT APPLICATION CORE LOGIC
+       ========================================== -->
+  <script>
+    // 1. BRAND & BUSINESS CONFIGURATION
+    const BRAND_CONFIG = {
+      name: "Giftira",
+      legalName: "Giftira Gifting Innovations Private Limited",
+      tagline: "Small Gifts. Big Feelings.",
+      currency: "₹",
+      supportPhone: "+91 98200 12345",
+      supportEmail: "care@giftira.in",
+      gstin: "24AAACG8892F1Z4",
+      freeShippingThreshold: 699,
+      defaultDeliveryFee: 49,
+      codFee: 49,
+      giftWrapFee: 49,
+      coupons: {
+        "FIRSTGIFT": { type: "percent", value: 10, minSpend: 299, desc: "10% OFF on first keepsake" },
+        "COMBO50": { type: "flat", value: 50, minSpend: 599, desc: "Flat ₹50 OFF on gift combos" },
+        "BIGFEELINGS": { type: "flat", value: 100, minSpend: 899, desc: "Flat ₹100 OFF on orders above ₹899" }
+      }
+    };
+
+    // Indian PIN Code Database
+    const PINCODE_DB = {
+      "361001": { city: "Jamnagar", state: "Gujarat", days: 2, courier: "BlueDart Express", cod: true },
+      "380001": { city: "Ahmedabad", state: "Gujarat", days: 2, courier: "Delhivery Air", cod: true },
+      "400001": { city: "Mumbai", state: "Maharashtra", days: 2, courier: "BlueDart Express", cod: true },
+      "110001": { city: "New Delhi", state: "Delhi", days: 2, courier: "Delhivery Air", cod: true },
+      "560001": { city: "Bengaluru", state: "Karnataka", days: 3, courier: "Delhivery Air", cod: true },
+      "500001": { city: "Hyderabad", state: "Telangana", days: 3, courier: "XpressBees", cod: true },
+      "600001": { city: "Chennai", state: "Tamil Nadu", days: 3, courier: "BlueDart Express", cod: true },
+      "700001": { city: "Kolkata", state: "West Bengal", days: 3, courier: "Delhivery Air", cod: true },
+      "302001": { city: "Jaipur", state: "Rajasthan", days: 3, courier: "Delhivery Air", cod: true },
+      "411001": { city: "Pune", state: "Maharashtra", days: 2, courier: "BlueDart Express", cod: true }
+    };
+
+    // Product Catalog (₹199 - ₹999)
+    const PRODUCTS = [
+      {
+        id: "prod-spotify",
+        name: "Custom Spotify Acrylic Song Plaque with Stand",
+        type: "spotify-plaque",
+        price: 499,
+        originalPrice: 899,
+        rating: 4.9,
+        reviewsCount: 428,
+        badge: "Bestseller #1",
+        occasions: ["Anniversary", "Valentine's", "Birthday", "Best Friend"],
+        image: "https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?auto=format&fit=crop&w=600&q=80",
+        description: "4mm cast virgin acrylic with ultra-HD UV print, working scannable code, custom photo, and pine stand."
+      },
+      {
+        id: "prod-lamp",
+        name: "Personalized Warm Glow LED Wooden Frame Lamp",
+        type: "led-lamp",
+        price: 649,
+        originalPrice: 1199,
+        rating: 4.8,
+        reviewsCount: 310,
+        badge: "Trending",
+        occasions: ["Birthday", "Anniversary", "Valentine's"],
+        image: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=600&q=80",
+        description: "3000K warm ambient bedside night lamp crafted in natural beech wood with permanent laser engraved vows."
+      },
+      {
+        id: "prod-mug",
+        name: "Handcrafted Ceramic Monogram Gold Rim Mug",
+        type: "mug",
+        price: 299,
+        originalPrice: 599,
+        rating: 4.6,
+        reviewsCount: 178,
+        badge: "Under ₹499",
+        occasions: ["Birthday", "Best Friend", "Corporate"],
+        image: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80",
+        description: "350ml high-gloss ivory mug with 24K gold luster painted rim and personalized first letter monogram."
+      },
+      {
+        id: "prod-wallet",
+        name: "Custom Laser Engraved Vegan Leather Wallet",
+        type: "wallet",
+        price: 349,
+        originalPrice: 699,
+        rating: 4.7,
+        reviewsCount: 195,
+        badge: "Great For Him",
+        occasions: ["Birthday", "Anniversary", "Corporate"],
+        image: "https://images.unsplash.com/photo-1627123424574-724758594e93?auto=format&fit=crop&w=600&q=80",
+        description: "Slim RFID-blocking wallet with custom name laser engraved on the exterior and secret love note inside."
+      },
+      {
+        id: "prod-combo-bff",
+        name: "Soul Sister Best Friend Curated Combo",
+        type: "combo",
+        price: 799,
+        originalPrice: 1499,
+        rating: 4.9,
+        reviewsCount: 512,
+        badge: "Combo Deal",
+        occasions: ["Best Friend", "Birthday"],
+        image: "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=600&q=80",
+        description: "Curated set: Custom initial ceramic mug, French vanilla scented candle, matching BFF keychain & card."
+      },
+      {
+        id: "prod-combo-love",
+        name: "Forever & Always Keepsake Romance Hamper",
+        type: "combo",
+        price: 899,
+        originalPrice: 1799,
+        rating: 5.0,
+        reviewsCount: 382,
+        badge: "Top Rated",
+        occasions: ["Anniversary", "Valentine's"],
+        image: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=600&q=80",
+        description: "Acrylic milestone date frame, rose gold pen, luxury heart candle, and warm fairy lights in an Imperial box."
+      }
+    ];
+
+    // Hamper Builder Assets
+    const HAMPER_BOXES = [
+      { id: "box-black", name: "Imperial Matte Black Magnetic Box", price: 149, image: "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=300&q=80", desc: "Rigid luxury board with gold crest foiling" },
+      { id: "box-pink", name: "Blush Pastel Velvet-Lined Box", price: 149, image: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=300&q=80", desc: "Soft feminine touch with champagne satin bed" },
+      { id: "box-wood", name: "Artisanal Pine Wood Sliding Crate", price: 199, image: "https://images.unsplash.com/photo-1583485088034-697b5bc54ccd?auto=format&fit=crop&w=300&q=80", desc: "Natural reusable sliding lid pine crate" }
+    ];
+
+    const HAMPER_ITEMS = [
+      { id: "hi-keychain", name: "Laser Cut Name Keychain", price: 119, icon: "🔑", category: "Personalized" },
+      { id: "hi-candle", name: "French Vanilla Soy Candle", price: 179, icon: "🕯️", category: "Wellness" },
+      { id: "hi-choco", name: "Belgian Roasted Almond Bar", price: 149, icon: "🍫", category: "Gourmet" },
+      { id: "hi-magnet", name: "Mini Polaroid Magnets (2 pcs)", price: 129, icon: "🖼️", category: "Personalized" },
+      { id: "hi-sipper", name: "Insulated Matte Steel Sipper", price: 289, icon: "🥤", category: "Drinkware" },
+      { id: "hi-bookmark", name: "Golden Laser Metal Bookmark", price: 99, icon: "🔖", category: "Stationery" }
+    ];
+
+    const GREETING_CARDS = [
+      { id: "card-bday", title: "Happy Birthday Sparkles", occ: "Birthday", msg: "Wishing you a year filled with grand adventures and endless joy! Keep shining." },
+      { id: "card-love", title: "To My Forever Partner", occ: "Anniversary", msg: "Every love story is special, but ours is my absolute favorite. Happy Anniversary!" },
+      { id: "card-bff", title: "Partner In Crime Always", occ: "Best Friend", msg: "Through late-night chats and wild laughter, thanks for being my rock. Cheers to you!" },
+      { id: "card-proud", title: "Proud Of You Always", occ: "Graduation", msg: "So proud of your dedication and milestone. May your next chapter be wonderful!" }
+    ];
+
+    const HAMPER_TOUCHES = [
+      { id: "touch-lights", name: "Warm Yellow LED Fairy Lights (Tucked inside)", price: 69, icon: "✨" },
+      { id: "touch-ribbon", name: "Hand-tied Champagne Gold Satin Ribbon", price: 49, icon: "🎀" },
+      { id: "touch-wax", name: "Royal Gold Wax Seal Stamp on Envelope", price: 39, icon: "📜" }
+    ];
+
+    // ==========================================
+    // 2. STATE MANAGEMENT & LOCAL STORAGE
+    // ==========================================
+    let currentPincode = "361001";
+    let activeOccasion = "All";
+    let activePriceTier = "All";
+    let cart = JSON.parse(localStorage.getItem("giftira_cart") || "[]");
+    let orders = JSON.parse(localStorage.getItem("giftira_orders") || JSON.stringify([
+      {
+        id: "GFT-849102",
+        date: "25 Oct 2026",
+        status: "Engraving in Progress",
+        total: 649,
+        paymentMethod: "Instant UPI (Google Pay)",
+        trackingNumber: "BD-9821472IN",
+        courier: "BlueDart Express",
+        shippingAddress: {
+          name: "Simran Kaur",
+          phone: "9876543210",
+          address: "Plot 12, Rose Villa, Jamnagar, Gujarat - 361001"
+        },
+        items: [
+          { name: "Personalized Warm Glow LED Wooden Frame Lamp", qty: 1, price: 649, customText: "Kunal & Simran • 14.02.2024" }
+        ]
+      }
+    ]));
+
+    let appliedCoupon = null;
+    let isGiftWrapActive = false;
+    let selectedStudioProduct = PRODUCTS[0];
+    let studioCustomPhoto = "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=600&q=80";
+    let studioSelectedFont = "font-serif";
+
+    // Hamper Builder Wizard State
+    let currentHamperStep = 1;
+    let selectedHamperBox = HAMPER_BOXES[0];
+    let selectedHamperItems = [HAMPER_ITEMS[0], HAMPER_ITEMS[1], HAMPER_ITEMS[2]];
+    let selectedHamperCard = GREETING_CARDS[0];
+    let selectedHamperTouches = [HAMPER_TOUCHES[0], HAMPER_TOUCHES[1]];
+
+    // Initialize Application
+    document.addEventListener("DOMContentLoaded", () => {
+      renderProducts();
+      renderHamperStep1();
+      renderHamperStep2();
+      renderHamperStep3();
+      renderHamperStep4();
+      updateCartUI();
+      renderOrders();
+      renderAdminOrders();
+      verifyPincode(currentPincode, false);
+    });
+
+    // Save to storage
+    function persistData() {
+      localStorage.setItem("giftira_cart", JSON.stringify(cart));
+      localStorage.setItem("giftira_orders", JSON.stringify(orders));
+    }
+
+    // ==========================================
+    // 3. TOAST & NOTIFICATION SYSTEM
+    // ==========================================
+    function showToast(msg) {
+      const container = document.getElementById("toastContainer");
+      const toast = document.createElement("div");
+      toast.className = "bg-slate-900/95 text-white text-xs px-4 py-3 rounded-2xl shadow-2xl backdrop-blur-md border border-slate-700 flex items-center gap-2 pointer-events-auto animate-fade-in";
+      toast.innerHTML = `<span>✨ ${msg}</span>`;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        setTimeout(() => toast.remove(), 300);
+      }, 3200);
+    }
+
+    // ==========================================
+    // 4. VIEW SWITCHER (SPA NAVIGATION)
+    // ==========================================
+    function switchView(viewName) {
+      document.getElementById("viewStore").classList.add("hidden");
+      document.getElementById("viewHamper").classList.add("hidden");
+      document.getElementById("viewOrders").classList.add("hidden");
+      document.getElementById("viewAdmin").classList.add("hidden");
+
+      // Reset active tab button styles
+      document.getElementById("navStoreBtn").className = "px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition text-slate-600 hover:text-slate-900";
+      document.getElementById("navHamperBtn").className = "px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-1.5 text-rose-700 hover:bg-rose-50 border border-rose-200";
+
+      if (viewName === 'store') {
+        document.getElementById("viewStore").classList.remove("hidden");
+        document.getElementById("navStoreBtn").className = "px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition text-rose-700 bg-rose-50";
+      } else if (viewName === 'hamper') {
+        document.getElementById("viewHamper").classList.remove("hidden");
+        document.getElementById("navHamperBtn").className = "px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-1.5 bg-rose-600 text-white shadow-md shadow-rose-200";
+      } else if (viewName === 'orders') {
+        document.getElementById("viewOrders").classList.remove("hidden");
+        renderOrders();
+      } else if (viewName === 'admin') {
+        document.getElementById("viewAdmin").classList.remove("hidden");
+        renderAdminOrders();
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // ==========================================
+    // 5. PINCODE & SERVICEABILITY ENGINE
+    // ==========================================
+    function verifyPincode(code, alertUser = true) {
+      const pin = (code || "").trim();
+      if (pin.length !== 6 || isNaN(pin)) {
+        if (alertUser) showToast("Please enter a valid 6-digit Indian PIN code");
+        return;
+      }
+
+      currentPincode = pin;
+      const data = PINCODE_DB[pin] || {
+        city: "Hub Area",
+        state: "India",
+        days: 4,
+        courier: "Delhivery Air Express",
+        cod: true
+      };
+
+      document.getElementById("navPincodeLabel").innerText = `${pin} (${data.city})`;
+      document.getElementById("serviceabilityBannerText").innerHTML = `Serviceable in <strong>${data.city}, ${data.state} (${pin})</strong> via ${data.courier} • Est. <strong>${data.days} Working Days</strong>`;
+      
+      const chkPinInput = document.getElementById("chkPincode");
+      if (chkPinInput) {
+        chkPinInput.value = pin;
+        document.getElementById("chkCity").value = data.city;
+        document.getElementById("chkState").value = data.state;
+      }
+
+      if (alertUser) {
+        showToast(`PIN ${pin} verified! Express delivery available to ${data.city}.`);
+      }
+    }
+
+    function promptPincode() {
+      const pin = prompt("Enter 6-digit Indian PIN code:", currentPincode);
+      if (pin) verifyPincode(pin, true);
+    }
+
+    function handleVerifyQuickPincode() {
+      const val = document.getElementById("pincodeFastCheckInput").value;
+      if (val) verifyPincode(val, true);
+    }
+
+    function handleCheckoutPincodeInput(val) {
+      if (val.length === 6) {
+        verifyPincode(val, false);
+      }
+    }
+
+    // ==========================================
+    // 6. PRODUCT CATALOG & FILTERS
+    // ==========================================
+    function renderProducts() {
+      const grid = document.getElementById("productGrid");
+      const query = (document.getElementById("searchInput")?.value || "").toLowerCase();
+
+      const filtered = PRODUCTS.filter(p => {
+        const matchesOccasion = activeOccasion === "All" || p.occasions.includes(activeOccasion);
+        let matchesPrice = true;
+        if (activePriceTier === "under-499") matchesPrice = p.price <= 499;
+        else if (activePriceTier === "499-799") matchesPrice = p.price > 499 && p.price <= 799;
+        else if (activePriceTier === "799-999") matchesPrice = p.price > 799;
+
+        const matchesSearch = p.name.toLowerCase().includes(query) || p.description.toLowerCase().includes(query);
+        return matchesOccasion && matchesPrice && matchesSearch;
+      });
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `
+          <div class="col-span-full text-center py-12 bg-white rounded-3xl border border-rose-100 p-8">
+            <p class="text-slate-500 text-sm">No gifts match your chosen filters.</p>
+            <button onclick="resetFilters()" class="mt-3 px-4 py-2 bg-slate-900 text-white rounded-xl text-xs font-bold">Reset Filters</button>
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = filtered.map(p => `
+        <div class="bg-white rounded-3xl border border-rose-100 overflow-hidden shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col group">
+          <div onclick="openPersonalizationStudio('${p.id}')" class="relative aspect-4/3 overflow-hidden bg-rose-50 cursor-pointer">
+            <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+            <span class="absolute top-3 left-3 bg-rose-600 text-white text-[11px] font-bold px-3 py-1 rounded-full shadow-md">
+              ${p.badge}
+            </span>
+          </div>
+
+          <div class="p-5 flex-1 flex flex-col justify-between space-y-3">
+            <div>
+              <div class="flex items-center gap-1.5 text-amber-500 text-xs font-semibold">
+                <span>★</span>
+                <span>${p.rating}</span>
+                <span class="text-slate-400">(${p.reviewsCount} reviews)</span>
+              </div>
+              <h3 onclick="openPersonalizationStudio('${p.id}')" class="font-bold text-slate-900 text-base mt-1 hover:text-rose-600 cursor-pointer transition line-clamp-1">
+                ${p.name}
+              </h3>
+              <p class="text-slate-500 text-xs mt-1 line-clamp-2 leading-relaxed">
+                ${p.description}
+              </p>
+            </div>
+
+            <div class="pt-3 border-t border-rose-50 flex items-center justify-between">
+              <div>
+                <span class="text-xl font-extrabold text-slate-900">₹${p.price}</span>
+                <span class="text-xs text-slate-400 line-through ml-1.5">₹${p.originalPrice}</span>
+              </div>
+              <button onclick="openPersonalizationStudio('${p.id}')" class="px-4 py-2 bg-rose-50 text-rose-700 hover:bg-rose-600 hover:text-white font-bold text-xs rounded-xl transition flex items-center gap-1.5">
+                <span>Personalize</span>
+                <span>→</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function setOccasionFilter(occ) {
+      activeOccasion = occ;
+      document.querySelectorAll(".occasion-chip").forEach(el => {
+        if (el.dataset.occ === occ) {
+          el.className = "occasion-chip active px-4 py-2 rounded-xl font-bold bg-slate-900 text-white shadow-xs shrink-0";
+        } else {
+          el.className = "occasion-chip px-4 py-2 rounded-xl font-medium bg-white border border-rose-200 text-slate-700 hover:bg-rose-50 shrink-0";
+        }
+      });
+      renderProducts();
+    }
+
+    function setPriceFilter(tier) {
+      activePriceTier = tier;
+      document.querySelectorAll(".price-chip").forEach(el => {
+        if (el.dataset.price === tier) {
+          el.className = "price-chip active px-3 py-1.5 rounded-lg font-bold bg-rose-600 text-white shrink-0";
+        } else {
+          el.className = "price-chip px-3 py-1.5 rounded-lg font-medium bg-white border border-slate-200 text-slate-600 hover:border-slate-300 shrink-0";
+        }
+      });
+      renderProducts();
+    }
+
+    function handleSearchFilter() {
+      renderProducts();
+    }
+
+    function resetFilters() {
+      activeOccasion = "All";
+      activePriceTier = "All";
+      document.getElementById("searchInput").value = "";
+      setOccasionFilter("All");
+      setPriceFilter("All");
+    }
+
+    // ==========================================
+    // 7. LIVE PERSONALIZATION STUDIO
+    // ==========================================
+    function openPersonalizationStudio(productId) {
+      selectedStudioProduct = PRODUCTS.find(p => p.id === productId) || PRODUCTS[0];
+      
+      document.getElementById("studioProductName").innerText = selectedStudioProduct.name;
+      document.getElementById("studioPriceTag").innerText = `₹${selectedStudioProduct.price}`;
+      
+      const textInput = document.getElementById("studioTextInput");
+      const songGroup = document.getElementById("studioSongGroup");
+      const photoGroup = document.getElementById("studioPhotoGroup");
+
+      // Set defaults according to product type
+      if (selectedStudioProduct.type === "spotify-plaque") {
+        document.getElementById("mockupSpotify").classList.remove("hidden");
+        document.getElementById("mockupLamp").classList.add("hidden");
+        document.getElementById("mockupMug").classList.add("hidden");
+        songGroup.classList.remove("hidden");
+        photoGroup.classList.remove("hidden");
+        textInput.value = "Rohit & Sneha • Forever";
+      } else if (selectedStudioProduct.type === "led-lamp") {
+        document.getElementById("mockupSpotify").classList.add("hidden");
+        document.getElementById("mockupLamp").classList.remove("hidden");
+        document.getElementById("mockupMug").classList.add("hidden");
+        songGroup.classList.add("hidden");
+        photoGroup.classList.remove("hidden");
+        textInput.value = "To the moon and back ✨";
+      } else {
+        document.getElementById("mockupSpotify").classList.add("hidden");
+        document.getElementById("mockupLamp").classList.add("hidden");
+        document.getElementById("mockupMug").classList.remove("hidden");
+        songGroup.classList.add("hidden");
+        photoGroup.classList.add("hidden");
+        textInput.value = "Ananya";
+      }
+
+      updateLiveMockup();
+      document.getElementById("studioModal").classList.remove("hidden");
+    }
+
+    function closePersonalizationStudio() {
+      document.getElementById("studioModal").classList.add("hidden");
+    }
+
+    function selectStudioFont(fontClass) {
+      studioSelectedFont = fontClass;
+      document.querySelectorAll(".font-btn").forEach(b => {
+        b.classList.remove("border-rose-600", "bg-rose-50");
+        b.classList.add("border-slate-200");
+      });
+      event.target.classList.add("border-rose-600", "bg-rose-50");
+      updateLiveMockup();
+    }
+
+    function handleStudioPhotoUpload(event) {
+      const file = event.target.files?.[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          studioCustomPhoto = e.target.result;
+          document.getElementById("mockupSpotifyImg").src = studioCustomPhoto;
+          document.getElementById("mockupLampImg").src = studioCustomPhoto;
+          showToast("Photo uploaded & updated on mockup!");
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function updateLiveMockup() {
+      const textVal = document.getElementById("studioTextInput").value || "Custom Inscription";
+      const songVal = document.getElementById("studioSongInput").value || "Song Title - Artist";
+      
+      document.getElementById("studioCharCount").innerText = `${textVal.length}/45`;
+
+      // Update Spotify Plaque
+      const spotifyText = document.getElementById("mockupSpotifyText");
+      spotifyText.innerText = `"${textVal}"`;
+      spotifyText.className = `text-amber-200 text-xs truncate ${studioSelectedFont}`;
+      document.getElementById("mockupSpotifyTitle").innerText = songVal;
+
+      // Update LED Lamp
+      const lampText = document.getElementById("mockupLampText");
+      lampText.innerText = `"${textVal}"`;
+      lampText.className = `text-amber-300 text-sm mt-4 drop-shadow-[0_0_12px_rgba(252,211,77,0.8)] ${studioSelectedFont}`;
+
+      // Update Mug
+      document.getElementById("mockupMugName").innerText = textVal;
+      document.getElementById("mockupMugInitial").innerText = textVal.charAt(0).toUpperCase() || "A";
+    }
+
+    function savePersonalizationAndAddToCart() {
+      const textVal = document.getElementById("studioTextInput").value.trim();
+      if (!textVal) {
+        showToast("Please enter an inscription to engrave");
+        return;
+      }
+
+      const cartItem = {
+        id: `ci_${Date.now()}`,
+        productId: selectedStudioProduct.id,
+        name: selectedStudioProduct.name,
+        price: selectedStudioProduct.price,
+        image: selectedStudioProduct.image,
+        qty: 1,
+        customization: {
+          engravedText: textVal,
+          songTitle: selectedStudioProduct.type === "spotify-plaque" ? document.getElementById("studioSongInput").value : null,
+          font: studioSelectedFont,
+          photo: studioCustomPhoto
+        }
+      };
+
+      cart.push(cartItem);
+      persistData();
+      updateCartUI();
+      closePersonalizationStudio();
+      toggleCartDrawer(true);
+      showToast(`Added "${selectedStudioProduct.name}" to gifting bag!`);
+    }
+
+    // ==========================================
+    // 8. HAMPER BUILDER WIZARD LOGIC
+    // ==========================================
+    function renderHamperStep1() {
+      const container = document.getElementById("hamperBoxesContainer");
+      container.innerHTML = HAMPER_BOXES.map(b => `
+        <div onclick="selectHamperBox('${b.id}')" class="box-card bg-white rounded-3xl border-2 p-4 cursor-pointer transition shadow-xs hover:shadow-lg ${selectedHamperBox.id === b.id ? 'border-rose-600 ring-4 ring-rose-50' : 'border-slate-200'}">
+          <div class="aspect-4/3 rounded-2xl overflow-hidden bg-slate-100 mb-3">
+            <img src="${b.image}" alt="${b.name}" class="w-full h-full object-cover">
+          </div>
+          <div class="flex justify-between items-start">
+            <h4 class="font-bold text-sm text-slate-900">${b.name}</h4>
+            <span class="font-bold text-xs text-rose-600">₹${b.price}</span>
+          </div>
+          <p class="text-xs text-slate-500 mt-1">${b.desc}</p>
+        </div>
+      `).join("");
+    }
+
+    function selectHamperBox(boxId) {
+      selectedHamperBox = HAMPER_BOXES.find(b => b.id === boxId) || HAMPER_BOXES[0];
+      renderHamperStep1();
+      updateHamperCostSummary();
+    }
+
+    function renderHamperStep2() {
+      const container = document.getElementById("hamperItemsContainer");
+      container.innerHTML = HAMPER_ITEMS.map(it => {
+        const isChecked = selectedHamperItems.some(i => i.id === it.id);
+        return `
+          <div onclick="toggleHamperItem('${it.id}')" class="p-4 rounded-2xl border transition cursor-pointer flex items-center justify-between ${isChecked ? 'border-rose-600 bg-rose-50/70 shadow-xs' : 'border-slate-200 bg-white hover:border-slate-300'}">
+            <div class="flex items-center gap-3">
+              <span class="text-2xl">${it.icon}</span>
+              <div>
+                <h4 class="font-bold text-xs text-slate-900">${it.name}</h4>
+                <span class="text-[11px] text-slate-500">${it.category} • ₹${it.price}</span>
+              </div>
+            </div>
+            <div class="w-6 h-6 rounded-full flex items-center justify-center text-xs ${isChecked ? 'bg-rose-600 text-white' : 'border border-slate-300 text-transparent'}">
+              ✓
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      document.getElementById("hamperItemCountBadge").innerText = `${selectedHamperItems.length} of 6 Selected`;
+    }
+
+    function toggleHamperItem(itemId) {
+      const exists = selectedHamperItems.some(i => i.id === itemId);
+      if (exists) {
+        if (selectedHamperItems.length <= 2) {
+          showToast("Please keep at least 2 curated items in your hamper");
+          return;
+        }
+        selectedHamperItems = selectedHamperItems.filter(i => i.id !== itemId);
+      } else {
+        if (selectedHamperItems.length >= 6) {
+          showToast("Maximum 6 items fit inside this presentation box");
+          return;
+        }
+        const found = HAMPER_ITEMS.find(i => i.id === itemId);
+        if (found) selectedHamperItems.push(found);
+      }
+      renderHamperStep2();
+      updateHamperCostSummary();
+    }
+
+    function renderHamperStep3() {
+      const container = document.getElementById("hamperCardTemplatesContainer");
+      container.innerHTML = GREETING_CARDS.map(c => `
+        <button type="button" onclick="selectHamperCard('${c.id}')" class="p-3.5 rounded-2xl border text-left transition ${selectedHamperCard.id === c.id ? 'border-rose-600 bg-rose-50 font-bold' : 'border-slate-200 bg-white'}">
+          <span class="text-xs block text-slate-800">${c.title}</span>
+          <span class="text-[10px] text-slate-400 uppercase tracking-wider block mt-1">${c.occ}</span>
+        </button>
+      `).join("");
+
+      document.getElementById("hamperCardMessage").value = selectedHamperCard.msg;
+    }
+
+    function selectHamperCard(cardId) {
+      selectedHamperCard = GREETING_CARDS.find(c => c.id === cardId) || GREETING_CARDS[0];
+      renderHamperStep3();
+    }
+
+    function renderHamperStep4() {
+      const container = document.getElementById("hamperTouchesContainer");
+      container.innerHTML = HAMPER_TOUCHES.map(t => {
+        const isSelected = selectedHamperTouches.some(item => item.id === t.id);
+        return `
+          <div onclick="toggleHamperTouch('${t.id}')" class="p-3.5 rounded-2xl border cursor-pointer flex justify-between items-center transition ${isSelected ? 'bg-rose-50 border-rose-600 shadow-xs' : 'bg-white border-slate-200'}">
+            <div class="flex items-center gap-2.5">
+              <span class="text-lg">${t.icon}</span>
+              <span class="text-xs font-bold text-slate-800">${t.name}</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-extrabold text-rose-600">+₹${t.price}</span>
+              <div class="w-5 h-5 rounded-md flex items-center justify-center text-xs ${isSelected ? 'bg-rose-600 text-white' : 'border border-slate-300'}">
+                ${isSelected ? '✓' : ''}
+              </div>
+            </div>
+          </div>
+        `;
+      }).join("");
+      updateHamperCostSummary();
+    }
+
+    function toggleHamperTouch(touchId) {
+      if (selectedHamperTouches.some(t => t.id === touchId)) {
+        selectedHamperTouches = selectedHamperTouches.filter(t => t.id !== touchId);
+      } else {
+        const found = HAMPER_TOUCHES.find(t => t.id === touchId);
+        if (found) selectedHamperTouches.push(found);
+      }
+      renderHamperStep4();
+    }
+
+    function updateHamperCostSummary() {
+      const boxCost = selectedHamperBox?.price || 0;
+      const itemsCost = selectedHamperItems.reduce((s, i) => s + i.price, 0);
+      const touchesCost = selectedHamperTouches.reduce((s, t) => s + t.price, 0);
+      const total = boxCost + itemsCost + touchesCost;
+
+      document.getElementById("summaryBoxCost").innerText = `₹${boxCost}`;
+      document.getElementById("summaryItemsCost").innerText = `₹${itemsCost}`;
+      document.getElementById("summaryTouchesCost").innerText = `₹${touchesCost}`;
+      document.getElementById("summaryHamperTotal").innerText = `₹${total}`;
+
+      return total;
+    }
+
+    function setHamperStep(stepNum) {
+      currentHamperStep = stepNum;
+      
+      for (let i = 1; i <= 4; i++) {
+        document.getElementById(`hamperStep${i}`).classList.add("hidden");
+        const circle = document.getElementById(`stepCircle${i}`);
+        if (i === stepNum) {
+          circle.className = "w-9 h-9 rounded-full bg-rose-600 text-white flex items-center justify-center text-xs font-bold ring-4 ring-rose-100 shadow-md";
+        } else if (i < stepNum) {
+          circle.className = "w-9 h-9 rounded-full bg-emerald-500 text-white flex items-center justify-center text-xs font-bold";
+        } else {
+          circle.className = "w-9 h-9 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-xs font-bold";
+        }
+      }
+
+      document.getElementById(`hamperStep${stepNum}`).classList.remove("hidden");
+
+      // Controls
+      const backBtn = document.getElementById("hamperBackBtn");
+      const nextBtn = document.getElementById("hamperNextBtn");
+
+      if (stepNum === 1) {
+        backBtn.classList.add("invisible");
+      } else {
+        backBtn.classList.remove("invisible");
+      }
+
+      if (stepNum < 4) {
+        nextBtn.innerHTML = `<span>Proceed to Step ${stepNum + 1}</span> →`;
+        nextBtn.onclick = nextHamperStep;
+      } else {
+        nextBtn.innerHTML = `<span>Add Custom Hamper to Bag (₹${updateHamperCostSummary()})</span>`;
+        nextBtn.onclick = finishHamperBuilder;
+      }
+    }
+
+    function nextHamperStep() {
+      if (currentHamperStep === 2 && selectedHamperItems.length < 2) {
+        showToast("Please choose at least 2 items to proceed");
+        return;
+      }
+      setHamperStep(currentHamperStep + 1);
+    }
+
+    function prevHamperStep() {
+      if (currentHamperStep > 1) {
+        setHamperStep(currentHamperStep - 1);
+      }
+    }
+
+    function finishHamperBuilder() {
+      const hamperTotal = updateHamperCostSummary();
+      const customHamper = {
+        id: `hamper_${Date.now()}`,
+        name: `Bespoke Curated Gift Hamper (${selectedHamperBox.name})`,
+        price: hamperTotal,
+        image: selectedHamperBox.image,
+        qty: 1,
+        customization: {
+          box: selectedHamperBox.name,
+          items: selectedHamperItems.map(i => i.name).join(", "),
+          cardMsg: document.getElementById("hamperCardMessage").value,
+          senderName: document.getElementById("hamperSenderName").value || "Warm Wishes",
+          touches: selectedHamperTouches.map(t => t.name).join(", ")
+        }
+      };
+
+      cart.push(customHamper);
+      persistData();
+      updateCartUI();
+      toggleCartDrawer(true);
+      showToast("🎉 Custom hamper created and added to your bag!");
+    }
+
+    // ==========================================
+    // 9. CART DRAWER & COUPON ENGINE
+    // ==========================================
+    function toggleCartDrawer(open) {
+      const drawer = document.getElementById("cartDrawer");
+      const backdrop = document.getElementById("cartDrawerBackdrop");
+
+      if (open) {
+        backdrop.classList.remove("hidden");
+        setTimeout(() => drawer.classList.remove("translate-x-full"), 10);
+      } else {
+        drawer.classList.add("translate-x-full");
+        setTimeout(() => backdrop.classList.add("hidden"), 300);
+      }
+    }
+
+    function updateCartUI() {
+      const count = cart.reduce((s, i) => s + i.qty, 0);
+      document.getElementById("cartBadge").innerText = count;
+      document.getElementById("drawerItemsCount").innerText = count;
+
+      const container = document.getElementById("cartItemsList");
+      if (cart.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-12 space-y-3">
+            <span class="text-4xl">🎁</span>
+            <h4 class="font-bold text-slate-800 text-sm">Your gifting bag is empty</h4>
+            <p class="text-slate-400 text-xs">Explore personalized plaques, LED lamps, and combos.</p>
+          </div>
+        `;
+      } else {
+        container.innerHTML = cart.map(item => `
+          <div class="bg-white rounded-2xl border border-rose-100 p-3.5 shadow-xs flex gap-3 items-start">
+            <img src="${item.image}" alt="${item.name}" class="w-16 h-16 rounded-xl object-cover bg-slate-100 shrink-0">
+            <div class="flex-1 space-y-1">
+              <div class="flex justify-between items-start">
+                <h5 class="font-bold text-xs text-slate-900 leading-snug">${item.name}</h5>
+                <span class="font-black text-xs text-slate-900">₹${item.price * item.qty}</span>
+              </div>
+              
+              ${item.customization ? `
+                <div class="bg-rose-50/60 p-1.5 rounded-lg text-[10px] text-slate-600 space-y-0.5">
+                  ${item.customization.engravedText ? `<p><strong>Engraving:</strong> "${item.customization.engravedText}"</p>` : ''}
+                  ${item.customization.items ? `<p><strong>Contents:</strong> ${item.customization.items}</p>` : ''}
+                  ${item.customization.cardMsg ? `<p><strong>Card Note:</strong> "${item.customization.cardMsg}"</p>` : ''}
+                </div>
+              ` : ''}
+
+              <div class="flex justify-between items-center pt-1.5">
+                <div class="flex items-center border border-slate-200 rounded-lg text-xs">
+                  <button onclick="changeCartQty('${item.id}', -1)" class="px-2 py-0.5 text-slate-600 hover:text-rose-600 font-bold">-</button>
+                  <span class="px-2 font-bold">${item.qty}</span>
+                  <button onclick="changeCartQty('${item.id}', 1)" class="px-2 py-0.5 text-slate-600 hover:text-rose-600 font-bold">+</button>
+                </div>
+                <button onclick="removeCartItem('${item.id}')" class="text-[11px] text-rose-500 hover:underline">Remove</button>
+              </div>
+            </div>
+          </div>
+        `).join("");
+      }
+
+      // Calculations
+      const subtotal = cart.reduce((s, i) => s + (i.price * i.qty), 0);
+      let discount = 0;
+
+      if (appliedCoupon) {
+        if (appliedCoupon.type === "percent") {
+          discount = Math.round((subtotal * appliedCoupon.value) / 100);
+        } else {
+          discount = appliedCoupon.value;
+        }
+      }
+
+      const isFreeDelivery = subtotal >= BRAND_CONFIG.freeShippingThreshold || subtotal === 0;
+      const deliveryFee = isFreeDelivery ? 0 : BRAND_CONFIG.defaultDeliveryFee;
+      const wrapFee = isGiftWrapActive ? BRAND_CONFIG.giftWrapFee : 0;
+      const finalTotal = Math.max(0, subtotal - discount + deliveryFee + wrapFee);
+
+      // Free shipping progress bar
+      const pct = Math.min(100, Math.round((subtotal / BRAND_CONFIG.freeShippingThreshold) * 100));
+      document.getElementById("freeShippingProgressBar").style.width = `${pct}%`;
+      if (subtotal >= BRAND_CONFIG.freeShippingThreshold) {
+        document.getElementById("freeShippingLabel").innerHTML = `<span class="text-emerald-700">✓ Free Delivery Unlocked!</span>`;
+      } else {
+        document.getElementById("freeShippingLabel").innerText = `Add ₹${BRAND_CONFIG.freeShippingThreshold - subtotal} for Free Delivery`;
+      }
+
+      // Render Totals
+      document.getElementById("cartSubtotalText").innerText = `₹${subtotal}`;
+      document.getElementById("cartDeliveryFeeText").innerText = isFreeDelivery ? "FREE" : `₹${deliveryFee}`;
+      
+      const discountRow = document.getElementById("couponDiscountRow");
+      if (appliedCoupon && discount > 0) {
+        discountRow.classList.remove("hidden");
+        document.getElementById("cartDiscountText").innerText = `-₹${discount}`;
+      } else {
+        discountRow.classList.add("hidden");
+      }
+
+      const wrapRow = document.getElementById("wrapFeeRow");
+      if (isGiftWrapActive) {
+        wrapRow.classList.remove("hidden");
+      } else {
+        wrapRow.classList.add("hidden");
+      }
+
+      document.getElementById("cartFinalTotalText").innerText = `₹${finalTotal}`;
+    }
+
+    function changeCartQty(itemId, delta) {
+      const idx = cart.findIndex(i => i.id === itemId);
+      if (idx > -1) {
+        cart[idx].qty += delta;
+        if (cart[idx].qty <= 0) cart.splice(idx, 1);
+        persistData();
+        updateCartUI();
+      }
+    }
+
+    function removeCartItem(itemId) {
+      cart = cart.filter(i => i.id !== itemId);
+      persistData();
+      updateCartUI();
+      showToast("Item removed from bag");
+    }
+
+    function toggleGiftWrap(isChecked) {
+      isGiftWrapActive = isChecked;
+      updateCartUI();
+    }
+
+    function applyCoupon() {
+      const code = (document.getElementById("couponInput").value || "").trim().toUpperCase();
+      const coupon = BRAND_CONFIG.coupons[code];
+      const subtotal = cart.reduce((s, i) => s + (i.price * i.qty), 0);
+
+      if (!coupon) {
+        showToast("Invalid coupon. Try 'FIRSTGIFT' or 'COMBO50'");
+        return;
+      }
+      if (subtotal < coupon.minSpend) {
+        showToast(`Add ₹${coupon.minSpend - subtotal} more to apply code '${code}'`);
+        return;
+      }
+
+      appliedCoupon = { ...coupon, code };
+      document.getElementById("appliedCouponTag").classList.remove("hidden");
+      document.getElementById("appliedCouponText").innerText = `Coupon '${code}' applied! (${coupon.desc})`;
+      updateCartUI();
+      showToast(`Promo '${code}' activated!`);
+    }
+
+    function removeCoupon() {
+      appliedCoupon = null;
+      document.getElementById("appliedCouponTag").classList.add("hidden");
+      document.getElementById("couponInput").value = "";
+      updateCartUI();
+    }
+
+    // ==========================================
+    // 10. CHECKOUT & PAYMENT INTEGRATION
+    // ==========================================
+    let currentSelectedPaymentMode = "upi";
+
+    function openCheckoutModal() {
+      if (cart.length === 0) {
+        showToast("Your bag is empty! Add a gift first.");
+        return;
+      }
+
+      toggleCartDrawer(false);
+
+      // Populate mini checkout summary
+      const subtotal = cart.reduce((s, i) => s + (i.price * i.qty), 0);
+      let discount = appliedCoupon ? (appliedCoupon.type === "percent" ? Math.round((subtotal * appliedCoupon.value) / 100) : appliedCoupon.value) : 0;
+      const isFreeDelivery = subtotal >= BRAND_CONFIG.freeShippingThreshold;
+      const deliveryFee = isFreeDelivery ? 0 : BRAND_CONFIG.defaultDeliveryFee;
+      const codFee = currentSelectedPaymentMode === "cod" ? BRAND_CONFIG.codFee : 0;
+      const total = Math.max(0, subtotal - discount + deliveryFee + codFee);
+
+      document.getElementById("checkoutSummaryItems").innerHTML = cart.map(i => `
+        <div class="flex justify-between items-center py-1">
+          <span class="truncate max-w-[200px]">${i.qty}x ${i.name}</span>
+          <span class="font-bold text-slate-800">₹${i.price * i.qty}</span>
+        </div>
+      `).join("");
+
+      document.getElementById("chkSubtotal").innerText = `₹${subtotal}`;
+      document.getElementById("chkDelivery").innerText = isFreeDelivery ? "FREE" : `₹${deliveryFee}`;
+      
+      const discRow = document.getElementById("chkDiscountRow");
+      if (discount > 0) {
+        discRow.classList.remove("hidden");
+        document.getElementById("chkDiscount").innerText = `-₹${discount}`;
+      } else {
+        discRow.classList.add("hidden");
+      }
+
+      document.getElementById("chkTotal").innerText = `₹${total}`;
+      document.getElementById("payButtonText").innerText = `Pay ₹${total} & Place Gift Order`;
+
+      document.getElementById("checkoutModal").classList.remove("hidden");
+    }
+
+    function closeCheckoutModal() {
+      document.getElementById("checkoutModal").classList.add("hidden");
+    }
+
+    function handlePaymentModeChange(mode) {
+      currentSelectedPaymentMode = mode;
+      const codRow = document.getElementById("chkCodRow");
+      if (mode === "cod") {
+        codRow.classList.remove("hidden");
+      } else {
+        codRow.classList.add("hidden");
+      }
+      openCheckoutModal(); // Refresh numbers
+    }
+
+    function executePaymentProcess() {
+      const name = document.getElementById("chkName").value.trim();
+      const phone = document.getElementById("chkPhone").value.trim();
+      const house = document.getElementById("chkHouse").value.trim();
+      const pincode = document.getElementById("chkPincode").value.trim();
+
+      if (!name || !phone || !house || pincode.length !== 6) {
+        showToast("Please fill all mandatory shipping address fields");
+        return;
+      }
+
+      if (currentSelectedPaymentMode === "upi") {
+        document.getElementById("upiModal").classList.remove("hidden");
+      } else if (currentSelectedPaymentMode === "card") {
+        const approve = confirm("Razorpay 3D-Secure Simulator: Proceed with RuPay / Visa Sandbox authorization?");
+        if (approve) {
+          finalizeOrderPlacement("Cards / NetBanking (Razorpay Verified)");
+        }
+      } else {
+        // Cash on delivery
+        finalizeOrderPlacement("Cash on Delivery (Pending ₹49 Verification)");
+      }
+    }
+
+    function closeUpiModal() {
+      document.getElementById("upiModal").classList.add("hidden");
+    }
+
+    function confirmUpiSimulation(appName) {
+      closeUpiModal();
+      finalizeOrderPlacement(`Instant UPI (${appName})`);
+    }
+
+    function finalizeOrderPlacement(paymentLabel) {
+      closeCheckoutModal();
+
+      const subtotal = cart.reduce((s, i) => s + (i.price * i.qty), 0);
+      let discount = appliedCoupon ? (appliedCoupon.type === "percent" ? Math.round((subtotal * appliedCoupon.value) / 100) : appliedCoupon.value) : 0;
+      const isFreeDelivery = subtotal >= BRAND_CONFIG.freeShippingThreshold;
+      const deliveryFee = isFreeDelivery ? 0 : BRAND_CONFIG.defaultDeliveryFee;
+      const codFee = currentSelectedPaymentMode === "cod" ? BRAND_CONFIG.codFee : 0;
+      const total = Math.max(0, subtotal - discount + deliveryFee + codFee);
+
+      const recipientName = document.getElementById("chkName").value;
+      const phone = document.getElementById("chkPhone").value;
+      const house = document.getElementById("chkHouse").value;
+      const street = document.getElementById("chkStreet").value;
+      const city = document.getElementById("chkCity").value;
+      const state = document.getElementById("chkState").value;
+      const pin = document.getElementById("chkPincode").value;
+
+      const newOrder = {
+        id: `GFT-${Math.floor(100000 + Math.random() * 900000)}`,
+        date: "25 Oct 2026",
+        status: "Engraving in Progress",
+        total: total,
+        paymentMethod: paymentLabel,
+        trackingNumber: `BD-${Math.floor(1000000 + Math.random() * 9000000)}IN`,
+        courier: PINCODE_DB[pin]?.courier || "BlueDart Express",
+        shippingAddress: {
+          name: recipientName,
+          phone: phone,
+          address: `${house}, ${street}, ${city}, ${state} - ${pin}`
+        },
+        items: [...cart]
+      };
+
+      orders.unshift(newOrder);
+      persistData();
+
+      // Populate Success screen
+      document.getElementById("successOrderId").innerText = newOrder.id;
+      document.getElementById("successRecipientTitle").innerText = `Thank you, ${recipientName}!`;
+      document.getElementById("invCustomerName").innerText = recipientName;
+      document.getElementById("invCustomerAddress").innerText = newOrder.shippingAddress.address;
+      document.getElementById("invCustomerPhone").innerText = `Ph: +91 ${phone}`;
+      document.getElementById("invPayMode").innerText = `Payment: ${paymentLabel}`;
+      document.getElementById("invGrandTotal").innerText = `Total Paid: ₹${total}`;
+
+      // Reset Cart
+      cart = [];
+      appliedCoupon = null;
+      persistData();
+      updateCartUI();
+
+      document.getElementById("orderSuccessModal").classList.remove("hidden");
+      showToast("🎉 Order confirmed! Engraving has commenced.");
+    }
+
+    function closeSuccessModal() {
+      document.getElementById("orderSuccessModal").classList.add("hidden");
+    }
+
+    // ==========================================
+    // 11. ORDER TRACKING & ADMIN PORTAL
+    // ==========================================
+    function renderOrders() {
+      const container = document.getElementById("ordersListContainer");
+      if (orders.length === 0) {
+        container.innerHTML = `<p class="text-slate-400 text-xs">No orders placed yet.</p>`;
+        return;
+      }
+
+      container.innerHTML = orders.map(ord => `
+        <div class="bg-white rounded-3xl border border-rose-100 p-5 shadow-xs space-y-3">
+          <div class="flex justify-between items-start border-b border-rose-50 pb-3">
+            <div>
+              <span class="text-xs font-bold text-rose-600">${ord.id}</span>
+              <h4 class="font-bold text-slate-900 text-sm mt-0.5">Placed on ${ord.date}</h4>
+              <p class="text-[11px] text-slate-500">Shipped to: ${ord.shippingAddress.name} (${ord.shippingAddress.address})</p>
+            </div>
+            <div class="text-right">
+              <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800">${ord.status}</span>
+              <span class="block font-black text-slate-900 text-sm mt-1">₹${ord.total}</span>
+            </div>
+          </div>
+
+          <div class="space-y-1.5 text-xs">
+            ${ord.items.map(it => `
+              <div class="flex justify-between text-slate-700">
+                <span>${it.qty}x ${it.name} ${it.customization?.engravedText ? `("${it.customization.engravedText}")` : ''}</span>
+                <span class="font-semibold">₹${it.price * it.qty}</span>
+              </div>
+            `).join("")}
+          </div>
+
+          <div class="pt-2 border-t border-slate-100 flex justify-between text-[11px] text-slate-500">
+            <span>Air Waybill: <strong>${ord.trackingNumber}</strong> via ${ord.courier}</span>
+            <span>Payment: <strong>${ord.paymentMethod}</strong></span>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function renderAdminOrders() {
+      document.getElementById("adminOrdersCount").innerText = orders.length;
+      const tbody = document.getElementById("adminOrdersTableBody");
+      
+      tbody.innerHTML = orders.map(ord => `
+        <tr class="hover:bg-rose-50/30">
+          <td class="p-3 font-bold text-slate-900">${ord.id}</td>
+          <td class="p-3">
+            <span class="font-semibold block">${ord.shippingAddress.name}</span>
+            <span class="text-[10px] text-slate-400">${ord.shippingAddress.address}</span>
+          </td>
+          <td class="p-3">
+            ${ord.items.map(i => `
+              <div class="mb-1">
+                <strong>${i.name}</strong>
+                ${i.customization?.engravedText ? `<span class="block text-rose-600 font-mono text-[11px]">"${i.customization.engravedText}"</span>` : ''}
+              </div>
+            `).join("")}
+          </td>
+          <td class="p-3">
+            <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800">${ord.status}</span>
+          </td>
+          <td class="p-3">
+            <button onclick="advanceAdminOrderStatus('${ord.id}')" class="px-2.5 py-1 bg-slate-900 text-white rounded-lg text-[10px] font-bold hover:bg-rose-600 transition">
+              Advance Stage →
+            </button>
+          </td>
+        </tr>
+      `).join("");
+    }
+
+    function advanceAdminOrderStatus(orderId) {
+      const idx = orders.findIndex(o => o.id === orderId);
+      if (idx > -1) {
+        const curr = orders[idx].status;
+        let next = "Engraving in Progress";
+        if (curr === "Engraving in Progress") next = "Quality Checked & Gift Packed";
+        else if (curr === "Quality Checked & Gift Packed") next = "Dispatched via Air Courier";
+        else if (curr === "Dispatched via Air Courier") next = "Out for Delivery";
+        else next = "Delivered";
+
+        orders[idx].status = next;
+        persistData();
+        renderAdminOrders();
+        renderOrders();
+        showToast(`Order ${orderId} status advanced to: ${next}`);
+      }
+    }
+  </script>
+
+</body>
+</html>
